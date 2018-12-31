@@ -1,0 +1,9 @@
+node_modules
+.idea
+*.log
+dist
+electron/dist
+Crypto-darwin-x64
+.awcache
+.env
+.DS_Store

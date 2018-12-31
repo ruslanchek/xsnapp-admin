@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="303px" height="304px" viewBox="0 0 303 304" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
+    <title>Logo</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="50%" x2="100%" y2="50%" id="linearGradient-1">
+            <stop stop-color="#0E98FA" offset="0%"></stop>
+            <stop stop-color="#E10C80" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-2">
+            <stop stop-color="#777DFF" offset="0%"></stop>
+            <stop stop-color="#2CDDE3" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Logo" transform="translate(-13.000000, -13.000000)">
+            <rect id="Rectangle" fill="url(#linearGradient-1)" transform="translate(164.835837, 164.965080) rotate(-45.273138) translate(-164.835837, -164.965080) " x="-35.164163" y="132.46508" width="400" height="65" rx="32.5"></rect>
+            <rect id="Rectangle" fill="url(#linearGradient-2)" transform="translate(164.835837, 164.965080) rotate(44.908322) translate(-164.835837, -164.965080) " x="-35.164163" y="132.46508" width="400" height="65" rx="32.5"></rect>
+            <polygon id="Rectangle" fill-opacity="0.354336504" fill="#FFFFFF" transform="translate(164.836346, 164.964535) rotate(-45.000000) translate(-164.836346, -164.964535) " points="132.284521 132.617372 197.283781 132.30852 197.388171 197.309486 132.388468 197.62055"></polygon>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,6 @@
+{
+    "commands": {
+        "build": "",
+        "run": "yarn run dev"
+    }
+}
