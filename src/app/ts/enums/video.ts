@@ -11,6 +11,12 @@ export enum EVideoImageKind {
 	Thumbnail = 'thumbnail',
 }
 
+export enum EFileType {
+	Thumbnail = 'thumbnail',
+	Video = 'video',
+	Preview = 'preview',
+}
+
 export enum EVideoKind {
 	Video = 'video',
 }

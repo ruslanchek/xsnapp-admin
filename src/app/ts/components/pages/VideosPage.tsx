@@ -11,6 +11,8 @@ import { IVideo, VideosStore } from '../../stores/VideosStore';
 import { followStore } from 'react-stores';
 import { IVideosFetchParams } from '../../managers/VideoManager';
 import { SorterResult } from 'antd/lib/table';
+import { EFileType, EVideoImageKind } from '../../enums/video';
+import { Utils } from '../../lib/Utils';
 
 interface IProps {}
 
@@ -45,6 +47,37 @@ export class VideosPage extends React.Component<IProps, IState> {
 			},
 
 			{
+				title: 'Preview',
+				dataIndex: 'videoFiles',
+				key: 'videoFiles',
+				render: (publish, row: IVideo) => {
+					const { videoFiles } = row;
+					const thumbnails = videoFiles
+						.filter(videoFile => videoFile.type === EFileType.Thumbnail)
+						.sort((a, b) => {
+							return a.fileName.localeCompare(b.fileName);
+						});
+
+					let previewSrc;
+
+					if (thumbnails && thumbnails[0]) {
+						previewSrc = Utils.getImagePath(
+							row.id,
+							thumbnails[0].fileName,
+							EVideoImageKind.Thumbnail,
+						);
+					}
+
+					return (
+						<Avatar
+							shape="square"
+							src={previewSrc}
+						/>
+					);
+				},
+			},
+
+			{
 				title: 'Publish',
 				dataIndex: 'publish',
 				key: 'publish',
@@ -75,9 +108,7 @@ export class VideosPage extends React.Component<IProps, IState> {
 				key: 'uploadedDate',
 				sorter: (a, b) => a.uploadedDate - b.uploadedDate,
 				render: uploadedDate => (
-					<div className={date}>
-						{uploadedDate.toLocaleString()}
-					</div>
+					<div className={date}>{uploadedDate.toLocaleString()}</div>
 				),
 			},
 

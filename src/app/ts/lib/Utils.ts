@@ -46,10 +46,16 @@ export class Utils {
 		}${EVideoFileExtension.Mp4.toString()}`;
 	}
 
-	public static convertSecondsToTimeString(seconds: number) {
-		const date = new Date(1970, 0, 1);
-		date.setSeconds(seconds);
-		return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, '$1');
+	public static convertSecondsToTimeString(secNum: number) {
+		const h = Math.floor(secNum / 3600);
+		const m = Math.floor((secNum - h * 3600) / 60);
+		const s = secNum - h * 3600 - m * 60;
+
+		const hours = `${h < 10 ? `0${h}` : h}`;
+		const minutes = `${m < 10 ? `0${m}` : m}`;
+		const seconds = `${s < 10 ? `0${s.toFixed(0)}` : s.toFixed(0)}`;
+
+		return `${hours}:${minutes}:${seconds}`;
 	}
 
 	private static selectVideoSize(

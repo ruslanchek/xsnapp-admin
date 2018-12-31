@@ -9,18 +9,23 @@ import {
 	Avatar,
 	Button,
 	Card,
+	Carousel,
 	Col,
 	DatePicker,
 	Form,
 	Icon,
 	Input,
 	Row,
+	Tag,
 	Timeline,
 } from 'antd';
 import { Utils } from '../../lib/Utils';
 import { css } from 'emotion';
 import { ItemInfo } from '../ui/ItemInfo';
 import { Link } from 'react-router-dom';
+import { Status } from '../ui/Status';
+import { Views } from '../ui/Views';
+import { EFileType } from '../../enums/video';
 
 interface IProps {}
 
@@ -80,6 +85,18 @@ export class VideoPage extends React.Component<IProps, IState> {
 			(processedDate.getTime() - new Date(itemData.uploadedDate).getTime()) /
 			1000;
 
+		const { videoFiles } = itemData;
+
+		const thumbnails = videoFiles
+			.filter(videoFile => videoFile.type === EFileType.Thumbnail)
+			.sort((a, b) => {
+				return a.fileName.localeCompare(b.fileName);
+			});
+
+		const previews = videoFiles.filter(
+			videoFile => videoFile.type === EFileType.Preview,
+		);
+
 		return (
 			<Row>
 				<Col span={18}>
@@ -110,6 +127,25 @@ export class VideoPage extends React.Component<IProps, IState> {
 						title="Video parameters"
 						items={[
 							{
+								title: 'Status',
+								value: (
+									<Status
+										corrupted={itemData.corrupted}
+										stored={itemData.stored}
+										uploaded={itemData.uploaded}
+										processed={itemData.processed}
+									/>
+								),
+							},
+							{
+								title: 'Priority',
+								value: <Tag>{itemData.priority}</Tag>,
+							},
+							{
+								title: 'Views',
+								value: <Views views={itemData.views} />,
+							},
+							{
 								title: 'Uploaded by',
 								value: (
 									<>
@@ -117,11 +153,15 @@ export class VideoPage extends React.Component<IProps, IState> {
 											size="small"
 											shape="square"
 											className={avatar}
-											src={`${CONFIG.AVATARS_PATH}/${itemData.user.id}/avatar.jpg`}
+											src={`${CONFIG.AVATARS_PATH}/${
+												itemData.user.id
+											}/avatar.jpg`}
 										/>
-										<Link to={`${itemData.user.id}`}>{itemData.user.username}</Link>
+										<Link to={`${itemData.user.id}`}>
+											{itemData.user.username}
+										</Link>
 									</>
-								)
+								),
 							},
 							{
 								title: 'Duration',
