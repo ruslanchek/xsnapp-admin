@@ -5,7 +5,7 @@ export enum EVideoFileExtension {
 	Image = '.image',
 }
 
-export enum EVideoImageKind {
+export enum EVideoFileKind {
 	Video = 'video',
 	Preview = 'preview',
 	Thumbnail = 'thumbnail',

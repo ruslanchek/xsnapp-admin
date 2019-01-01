@@ -1,6 +1,6 @@
 import { CONFIG } from '../config';
 import {
-	EVideoImageKind,
+	EVideoFileKind,
 	EVideoFileExtension,
 	EVideoFileSize,
 } from '../enums/video';
@@ -10,17 +10,17 @@ export class Utils {
 	public static getImagePath(
 		videoId: number,
 		fileName: string,
-		kind: EVideoImageKind,
+		kind: EVideoFileKind,
 	): string {
 		let extension: EVideoFileExtension = null;
 
 		switch (kind) {
-			case EVideoImageKind.Preview: {
+			case EVideoFileKind.Preview: {
 				extension = EVideoFileExtension.Mp4;
 				break;
 			}
 
-			case EVideoImageKind.Thumbnail: {
+			case EVideoFileKind.Thumbnail: {
 				extension = EVideoFileExtension.Image;
 				break;
 			}
@@ -44,6 +44,15 @@ export class Utils {
 		return `${CONFIG.CONTENT_PATH}/${videoId}/${
 			video.fileName
 		}${EVideoFileExtension.Mp4.toString()}`;
+	}
+
+	public static getDirectVideoPath(
+		videoId: number,
+		fileName: string,
+	): string {
+		return `${CONFIG.CONTENT_PATH}/${videoId}/${
+			fileName
+			}${EVideoFileExtension.Mp4.toString()}`;
 	}
 
 	public static convertSecondsToTimeString(secNum: number) {

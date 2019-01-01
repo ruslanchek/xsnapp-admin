@@ -11,7 +11,11 @@ import { IVideo, VideosStore } from '../../stores/VideosStore';
 import { followStore } from 'react-stores';
 import { IVideosFetchParams } from '../../managers/VideoManager';
 import { SorterResult } from 'antd/lib/table';
-import { EFileType, EVideoImageKind } from '../../enums/video';
+import {
+	EFileType,
+	EVideoFileExtension,
+	EVideoFileKind,
+} from '../../enums/video';
 import { Utils } from '../../lib/Utils';
 
 interface IProps {}
@@ -64,16 +68,11 @@ export class VideosPage extends React.Component<IProps, IState> {
 						previewSrc = Utils.getImagePath(
 							row.id,
 							thumbnails[0].fileName,
-							EVideoImageKind.Thumbnail,
-						);
+							EVideoFileKind.Thumbnail,
+						).replace(EVideoFileExtension.Image, EVideoFileExtension.Jpeg);
 					}
 
-					return (
-						<Avatar
-							shape="square"
-							src={previewSrc}
-						/>
-					);
+					return <Avatar shape="square" src={previewSrc} />;
 				},
 			},
 
@@ -168,7 +167,7 @@ export class VideosPage extends React.Component<IProps, IState> {
 		return (
 			<>
 				<Table
-					size="middle"
+					size="small"
 					pagination={this.state.pagination}
 					loading={VideosStore.store.state.loading}
 					onChange={this.handleChange}

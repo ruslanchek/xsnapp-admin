@@ -42,7 +42,7 @@ export class VideosManager extends Manager {
 			};
 		});
 
-		const total = result.data['count'];
+		const total = result.data['total'];
 
 		VideosStore.store.setState({
 			videos,
@@ -52,5 +52,19 @@ export class VideosManager extends Manager {
 		});
 
 		return { items: videos, total };
+	}
+
+	public async publish(id: number, publish: boolean): Promise<boolean> {
+		const result = await managers.api.request(
+			EApiRequestType.POST,
+			API_PATHS.EDIT_ITEM.replace(':itemId', id.toString()),
+			{ id, publish },
+		);
+
+		if (result && result.data && result.data['item']) {
+			return result.data['item'].publish;
+		}
+
+		return publish;
 	}
 }

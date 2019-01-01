@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Switch } from 'antd';
+import { managers } from '../../managers';
 
 interface IProps {
 	id: number;
@@ -39,7 +40,7 @@ export class Publish extends React.PureComponent<IProps, {}> {
 		);
 	}
 
-	private handleChange = () => {
+	private handleChange = async () => {
 		if (this.state.loading) {
 			return;
 		}
@@ -48,11 +49,14 @@ export class Publish extends React.PureComponent<IProps, {}> {
 			loading: true,
 		});
 
-		setTimeout(() => {
-			this.setState({
-				loading: false,
-				publish: !this.state.publish,
-			});
-		}, 1000);
+		const publish = await managers.videos.publish(
+			this.props.id,
+			!this.state.publish,
+		);
+
+		this.setState({
+			loading: false,
+			publish,
+		});
 	};
 }
