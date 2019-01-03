@@ -10,6 +10,7 @@ export interface IVideoFile {
 	id: number;
 	type: string;
 	fileName: string;
+	main: boolean;
 }
 
 export interface IVideo {

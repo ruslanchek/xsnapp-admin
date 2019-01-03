@@ -229,6 +229,16 @@ export class VideoPage extends React.Component<IProps, IState> {
 			},
 
 			{
+				title: 'Main',
+				dataIndex: 'main',
+				key: 'main',
+				sorter: (a, b) => a.main - b.main,
+				render: (main, row: IVideoFile) => {
+					return main ? <Tag color="cyan">Main</Tag> : <>&mdash;</>;
+				},
+			},
+
+			{
 				title: 'Type',
 				dataIndex: 'type',
 				key: 'type',
