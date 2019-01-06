@@ -56,23 +56,28 @@ export class VideosPage extends React.Component<IProps, IState> {
 				key: 'videoFiles',
 				render: (publish, row: IVideo) => {
 					const { videoFiles } = row;
-					const thumbnails = videoFiles
-						.filter(videoFile => videoFile.type === EFileType.Thumbnail)
-						.sort((a, b) => {
-							return a.fileName.localeCompare(b.fileName);
-						});
 
-					let previewSrc;
+					if (videoFiles) {
+						const thumbnails = videoFiles
+							.filter(videoFile => videoFile.type === EFileType.Thumbnail)
+							.sort((a, b) => {
+								return a.fileName.localeCompare(b.fileName);
+							});
 
-					if (thumbnails && thumbnails[0]) {
-						previewSrc = Utils.getImagePath(
-							row.id,
-							thumbnails[0].fileName,
-							EVideoFileKind.Thumbnail,
-						).replace(EVideoFileExtension.Image, EVideoFileExtension.Jpeg);
+						let previewSrc;
+
+						if (thumbnails && thumbnails[0]) {
+							previewSrc = Utils.getImagePath(
+								row.id,
+								thumbnails[0].fileName,
+								EVideoFileKind.Thumbnail,
+							).replace(EVideoFileExtension.Image, EVideoFileExtension.Jpeg);
+						}
+
+						return <Avatar shape="square" src={previewSrc} />;
+					} else {
+						return null;
 					}
-
-					return <Avatar shape="square" src={previewSrc} />;
 				},
 			},
 
@@ -149,17 +154,21 @@ export class VideosPage extends React.Component<IProps, IState> {
 				dataIndex: 'user.username',
 				key: 'user',
 				render: (username, row: IVideo) => {
-					return (
-						<>
-							<Avatar
-								size="small"
-								shape="square"
-								className={avatar}
-								src={`${CONFIG.AVATARS_PATH}/${row.user.id}/avatar.jpg`}
-							/>
-							<Link to={`${row.user.id}`}>{username}</Link>
-						</>
-					);
+					if(username) {
+						return (
+							<>
+								<Avatar
+									size="small"
+									shape="square"
+									className={avatar}
+									src={`${CONFIG.AVATARS_PATH}/${row.user.id}/avatar.jpg`}
+								/>
+								<Link to={`${row.user.id}`}>{username}</Link>
+							</>
+						);
+					} else {
+						return null;
+					}
 				},
 			},
 		];

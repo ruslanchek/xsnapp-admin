@@ -1,13 +1,14 @@
 import * as React from 'react';
-import { Table } from 'antd';
-import { PATHS } from 'app/ts/config';
+import { Avatar, Table } from 'antd';
+import { CONFIG, PATHS } from 'app/ts/config';
 import { css } from 'react-emotion';
 import { managers } from '../../managers';
-import { VideosStore } from '../../stores/VideosStore';
+import { IVideo, VideosStore } from '../../stores/VideosStore';
 import { followStore } from 'react-stores';
 import { IVideosFetchParams } from '../../managers/VideoManager';
 import { SorterResult } from 'antd/lib/table';
-import { UsersStore } from '../../stores/UsersStore';
+import { IUser, UsersStore } from '../../stores/UsersStore';
+import { Link } from 'react-router-dom';
 
 interface IProps {}
 
@@ -45,7 +46,23 @@ export class UsersPage extends React.Component<IProps, IState> {
 				title: 'Username',
 				dataIndex: 'username',
 				key: 'username',
-				sorter: (a, b) => a.username - b.username,
+				render: (username, row: IUser) => {
+					if(username) {
+						return (
+							<>
+								<Avatar
+									size="small"
+									shape="square"
+									className={avatar}
+									src={`${CONFIG.AVATARS_PATH}/${row.id}/avatar.jpg`}
+								/>
+								<Link to={`${row.id}`}>{username}</Link>
+							</>
+						);
+					} else {
+						return null;
+					}
+				},
 			},
 
 			{
@@ -60,8 +77,12 @@ export class UsersPage extends React.Component<IProps, IState> {
 				dataIndex: 'lastSeen',
 				key: 'lastSeen',
 				sorter: (a, b) => a.lastSeen - b.lastSeen,
-				render: (lastSeen) => {
-					return <div className={date}>{lastSeen.toLocaleString()}</div>;
+				render: lastSeen => {
+					if (lastSeen) {
+						return <div className={date}>{lastSeen.toLocaleString()}</div>;
+					} else {
+						return null;
+					}
 				},
 			},
 		];
