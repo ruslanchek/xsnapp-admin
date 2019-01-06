@@ -1,5 +1,5 @@
 import { Store } from 'react-stores';
-import { IVideosFetchParams } from '../managers/VideoManager';
+import { IListFetchParams } from '../managers/ApiManager';
 
 export interface IVideoUser {
 	id: number;
@@ -35,14 +35,14 @@ export interface IVideo {
 
 export namespace VideosStore {
 	interface IState {
-		videos: IVideo[];
+		items: IVideo[];
 		total: number;
-		fetchParams: IVideosFetchParams;
+		fetchParams: IListFetchParams;
 		loading: boolean;
 	}
 
 	export const initialState: IState = {
-		videos: [],
+		items: [],
 		total: 0,
 		fetchParams: {},
 		loading: false,

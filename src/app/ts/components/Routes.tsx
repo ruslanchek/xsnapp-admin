@@ -5,6 +5,7 @@ import { Page } from './pages/Page';
 import { HomePage } from './pages/HomePage';
 import { VideosPage } from './pages/VideosPage';
 import { VideoPage } from './pages/VideoPage';
+import { UsersPage } from './pages/UsersPage';
 
 interface IState {
 	key: number;
@@ -56,7 +57,7 @@ export class Routes extends React.Component<{}, IState> {
 					render={props => {
 						return (
 							<Page {...props}>
-								<HomePage />
+								<UsersPage />
 							</Page>
 						);
 					}}

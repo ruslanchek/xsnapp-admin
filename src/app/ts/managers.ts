@@ -2,13 +2,15 @@ import { RouteManager } from './managers/RouteManager';
 import { StorageManager } from './managers/StorageManager';
 import { StateStore } from './stores/StateStore';
 import { ApiManager } from './managers/ApiManager';
-import { VideosManager } from './managers/VideoManager';
+import { VideosManager } from './managers/VideosManager';
+import { UsersManager } from './managers/UsersManager';
 
 export class Managers {
 	public route: RouteManager;
 	public storage: StorageManager;
 	public api: ApiManager;
 	public videos: VideosManager;
+	public users: UsersManager;
 
 	private initStartTime: number = 0;
 
@@ -17,6 +19,7 @@ export class Managers {
 		this.storage = new StorageManager();
 		this.api = new ApiManager();
 		this.videos = new VideosManager();
+		this.users = new UsersManager();
 
 		this.init();
 	}
@@ -52,6 +55,7 @@ export class Managers {
 		this.storage.reset();
 		this.api.reset();
 		this.videos.reset();
+		this.users.reset();
 	}
 
 	private async initManagers(): Promise<any> {
@@ -66,6 +70,9 @@ export class Managers {
 
 		await this.videos.init();
 		this.logTime('VideosManager ready');
+
+		await this.users.init();
+		this.logTime('UsersManager ready');
 	}
 }
 

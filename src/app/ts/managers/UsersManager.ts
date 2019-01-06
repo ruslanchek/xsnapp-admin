@@ -1,17 +1,10 @@
 import { Manager } from './Manager';
 import { managers } from '../managers';
-import { EApiRequestType } from './ApiManager';
-import { API_PATHS, CONFIG } from '../config';
+import { EApiRequestType, IListFetchParams } from './ApiManager';
+import { API_PATHS } from '../config';
 import { IVideo, VideosStore } from '../stores/VideosStore';
 
-export interface IVideosFetchParams {
-	page?: number;
-	number?: number;
-	orderColumn?: string;
-	orderDirection?: 'ascend' | 'descend';
-}
-
-export class VideosManager extends Manager {
+export class UsersManager extends Manager {
 	public reset(): void {}
 
 	public init(): Promise<any> {
@@ -21,15 +14,13 @@ export class VideosManager extends Manager {
 	}
 
 	public async fetch(
-		params?: IVideosFetchParams,
+		params?: IListFetchParams,
 	): Promise<{ items: IVideo[]; total: number }> {
-		VideosStore.store.setState({
-			loading: true,
-		});
+		VideosStore.store.setState({ loading: true });
 
 		const result = await managers.api.request(
 			EApiRequestType.GET,
-			API_PATHS.GET_ITEMS,
+			API_PATHS.GET_USERS,
 			params ? params : {},
 		);
 
@@ -45,7 +36,7 @@ export class VideosManager extends Manager {
 		const total = result.data['total'];
 
 		VideosStore.store.setState({
-			videos,
+			items: videos,
 			total,
 			loading: false,
 			fetchParams: params,
@@ -57,7 +48,7 @@ export class VideosManager extends Manager {
 	public async publish(id: number, publish: boolean): Promise<boolean> {
 		const result = await managers.api.request(
 			EApiRequestType.POST,
-			API_PATHS.EDIT_ITEM.replace(':itemId', id.toString()),
+			API_PATHS.EDIT_USER.replace(':itemId', id.toString()),
 			{ id, publish },
 		);
 

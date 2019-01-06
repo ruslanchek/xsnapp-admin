@@ -9,7 +9,6 @@ import { Status } from '../ui/Status';
 import { managers } from '../../managers';
 import { IVideo, VideosStore } from '../../stores/VideosStore';
 import { followStore } from 'react-stores';
-import { IVideosFetchParams } from '../../managers/VideoManager';
 import { SorterResult } from 'antd/lib/table';
 import {
 	EFileType,
@@ -17,6 +16,7 @@ import {
 	EVideoFileKind,
 } from '../../enums/video';
 import { Utils } from '../../lib/Utils';
+import { IListFetchParams } from '../../managers/ApiManager';
 
 interface IProps {}
 
@@ -171,7 +171,7 @@ export class VideosPage extends React.Component<IProps, IState> {
 					pagination={this.state.pagination}
 					loading={VideosStore.store.state.loading}
 					onChange={this.handleChange}
-					dataSource={VideosStore.store.state.videos}
+					dataSource={VideosStore.store.state.items}
 					columns={columns}
 				/>
 			</>
@@ -183,7 +183,7 @@ export class VideosPage extends React.Component<IProps, IState> {
 		filters,
 		sorter: SorterResult<any>,
 	) => {
-		const params: IVideosFetchParams = {};
+		const params: IListFetchParams = {};
 
 		params.orderColumn = sorter.columnKey;
 		params.orderDirection = sorter.order;

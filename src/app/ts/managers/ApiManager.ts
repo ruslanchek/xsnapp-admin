@@ -11,6 +11,13 @@ export enum EApiRequestType {
 	DELETE,
 }
 
+export interface IListFetchParams {
+	page?: number;
+	number?: number;
+	orderColumn?: string;
+	orderDirection?: 'ascend' | 'descend';
+}
+
 export interface IApiResult<Payload> {
 	data: Payload;
 	error: string;
