@@ -23,13 +23,13 @@ export class ItemInfo extends React.Component<IProps, {}> {
 			<Card title={title}>
 				{items.map((item, i) => {
 					return (
-						<>
+						<React.Fragment key={i}>
 							<strong className={infoTitle}>{item.title}</strong>
 							<div>
 								{item.value}
 							</div>
 							{i < items.length - 1 && <br />}
-						</>
+						</React.Fragment>
 					)
 				})}
 			</Card>

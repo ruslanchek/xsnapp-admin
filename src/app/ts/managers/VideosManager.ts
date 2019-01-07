@@ -60,4 +60,16 @@ export class VideosManager extends Manager {
 
 		return publish;
 	}
+
+	public async edit(id: number, data: Partial<IVideo>): Promise<boolean> {
+		const result = await managers.api.request(
+			EApiRequestType.POST,
+			API_PATHS.EDIT_ITEM.replace(':itemId', id.toString()),
+			data,
+		);
+
+		if (result && result.data && result.data['item']) {
+			return result.data['item'];
+		}
+	}
 }

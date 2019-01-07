@@ -31,6 +31,7 @@ export interface IVideo {
 	stored: boolean;
 	uploaded: boolean;
 	uploadedDate: string;
+	publish: boolean;
 }
 
 export namespace VideosStore {

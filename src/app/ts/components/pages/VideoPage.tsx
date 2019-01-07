@@ -24,6 +24,9 @@ import { Link } from 'react-router-dom';
 import { Status } from '../ui/Status';
 import { Views } from '../ui/Views';
 import { EVideoFileExtension, EVideoFileKind } from '../../enums/video';
+import { Publish } from '../ui/Publish';
+
+const PICK_FIELDS = ['title', 'description'];
 
 interface IProps {}
 
@@ -32,6 +35,7 @@ interface IState {
 	itemData: IVideo;
 	modalContent: React.ReactNode;
 	modalTitle: string;
+	loading: boolean;
 }
 
 const FORM_ITEM_LAYOUT = {
@@ -51,6 +55,7 @@ export class VideoPage extends React.Component<IProps, IState> {
 		itemData: null,
 		modalContent: null,
 		modalTitle: null,
+		loading: false,
 	};
 
 	public async componentDidMount() {}
@@ -83,11 +88,29 @@ export class VideoPage extends React.Component<IProps, IState> {
 			<Row gutter={24}>
 				<Col span={18}>
 					<Form onSubmit={this.handleSubmit}>
+						<Form.Item label="Publish" {...FORM_ITEM_LAYOUT}>
+							<Publish id={itemData.id} publish={itemData.publish} />
+						</Form.Item>
+
 						<Form.Item label="Title" {...FORM_ITEM_LAYOUT}>
 							<Input
 								size="large"
-								placeholder="input placeholder"
-								value={itemData.title}
+								defaultValue={itemData.title}
+								value={this.state.itemData.title}
+								onChange={e => {
+									this.changeModel('title', e.target.value);
+								}}
+							/>
+						</Form.Item>
+
+						<Form.Item label="Title" {...FORM_ITEM_LAYOUT}>
+							<Input.TextArea
+								rows={4}
+								defaultValue={itemData.description}
+								value={this.state.itemData.description}
+								onChange={e => {
+									this.changeModel('description', e.target.value);
+								}}
 							/>
 						</Form.Item>
 
@@ -97,6 +120,7 @@ export class VideoPage extends React.Component<IProps, IState> {
 								size="large"
 								type="primary"
 								onClick={() => {}}
+								loading={this.state.loading}
 							>
 								Save
 							</Button>
@@ -118,7 +142,7 @@ export class VideoPage extends React.Component<IProps, IState> {
 				</Col>
 
 				<Modal
-					title={this.state.modalTitle}
+					title={`${this.state.itemData.title} – ${this.state.modalTitle}`}
 					width="700px"
 					visible={Boolean(this.state.modalContent)}
 					onOk={this.handleCloseModal}
@@ -138,8 +162,24 @@ export class VideoPage extends React.Component<IProps, IState> {
 		});
 	};
 
-	private handleSubmit = e => {
+	private handleSubmit = async e => {
 		e.preventDefault();
+
+		this.setState({
+			loading: true,
+		});
+
+		const model = {};
+
+		PICK_FIELDS.forEach(field => {
+			model[field] = this.state.itemData[field];
+		});
+
+		await managers.videos.edit(this.state.itemData.id, model);
+
+		this.setState({
+			loading: false,
+		});
 	};
 
 	private async fetch() {
@@ -173,7 +213,8 @@ export class VideoPage extends React.Component<IProps, IState> {
 			{
 				title: 'Preview',
 				dataIndex: 'id',
-				key: 'id',
+				key: 'preview',
+				rowKey: row => 'preview' + row.id,
 				render: (id, row: IVideoFile) => {
 					switch (row.type) {
 						case EVideoFileKind.Thumbnail: {
@@ -188,7 +229,7 @@ export class VideoPage extends React.Component<IProps, IState> {
 									className={preview}
 									onClick={() => {
 										this.setState({
-											modalTitle: row.fileName,
+											modalTitle: `${row.fileName}.${EVideoFileExtension.Jpeg}`,
 											modalContent: <img width="100%" src={previewSrc} />,
 										});
 									}}
@@ -209,7 +250,7 @@ export class VideoPage extends React.Component<IProps, IState> {
 									size="default"
 									onClick={() => {
 										this.setState({
-											modalTitle: row.fileName,
+											modalTitle: `${row.fileName}.${EVideoFileExtension.Mp4}`,
 											modalContent: (
 												<video
 													controls={true}
@@ -232,9 +273,15 @@ export class VideoPage extends React.Component<IProps, IState> {
 				title: 'Main',
 				dataIndex: 'main',
 				key: 'main',
-				sorter: (a, b) => a.main - b.main,
+				sorter: (a, b) => (a.main ? 1 : b.main ? -1 : 0),
 				render: (main, row: IVideoFile) => {
-					return main ? <Tag color="cyan">Main</Tag> : <>&mdash;</>;
+					return main ? (
+						<Tag key={row.id + 'main'} color="cyan">
+							Main
+						</Tag>
+					) : (
+						<>&mdash;</>
+					);
 				},
 			},
 
@@ -242,20 +289,22 @@ export class VideoPage extends React.Component<IProps, IState> {
 				title: 'Type',
 				dataIndex: 'type',
 				key: 'type',
-				sorter: (a, b) => a.type - b.type,
+				sorter: (a, b) => ('' + a.type).localeCompare(b.type),
 			},
 
 			{
 				title: 'File name',
 				dataIndex: 'fileName',
 				key: 'fileName',
-				sorter: (a, b) => a.type - b.type,
+				sorter: (a, b) => ('' + a.fileName).localeCompare(b.fileName),
 			},
 
 			{
 				title: 'File URL',
 				dataIndex: 'fileName',
-				key: 'fileName',
+				key: 'fileUrl',
+				rowKey: row => 'fileUrl' + row.id,
+				sorter: (a, b) => ('' + a.fileName).localeCompare(b.fileName),
 				render: (id, row: IVideoFile) => {
 					switch (row.type) {
 						case EVideoFileKind.Thumbnail: {
@@ -266,7 +315,7 @@ export class VideoPage extends React.Component<IProps, IState> {
 							);
 
 							return (
-								<>
+								<React.Fragment key={id + 'fileName1'}>
 									<Tag>
 										<a
 											target="_blank"
@@ -291,7 +340,7 @@ export class VideoPage extends React.Component<IProps, IState> {
 											{EVideoFileExtension.Webp}
 										</a>
 									</Tag>
-								</>
+								</React.Fragment>
 							);
 						}
 
@@ -300,7 +349,7 @@ export class VideoPage extends React.Component<IProps, IState> {
 							const videoSrc = Utils.getDirectVideoPath(videoId, row.fileName);
 
 							return (
-								<Tag>
+								<Tag key={id + 'fileName1'}>
 									<a target="_blank" href={videoSrc}>
 										{row.fileName}
 									</a>
@@ -370,8 +419,8 @@ export class VideoPage extends React.Component<IProps, IState> {
 							.filter(file => {
 								return file.type === EVideoFileKind.Video;
 							})
-							.map(file => {
-								return <Tag>{file.fileName}</Tag>;
+							.map((file, i) => {
+								return <Tag key={i}>{file.fileName}</Tag>;
 							})}
 					</>
 				),
@@ -395,6 +444,16 @@ export class VideoPage extends React.Component<IProps, IState> {
 				value: Utils.convertSecondsToTimeString(processingTime),
 			},
 		];
+	}
+
+	private changeModel(field: string, value: any) {
+		const itemData = { ...this.state.itemData, ...{} };
+
+		itemData[field] = value;
+
+		this.setState({
+			itemData,
+		});
 	}
 }
 

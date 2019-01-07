@@ -10,16 +10,12 @@ import { css } from 'emotion';
 
 interface IProps {}
 
-interface IState {
-
-}
+interface IState {}
 
 @followStore(UsersStore.store)
 @followStore(VideosStore.store)
 export class HomePage extends React.Component<IProps, IState> {
-	public state: IState = {
-
-	};
+	public state: IState = {};
 
 	public async componentDidMount() {
 		managers.route.setTitle('Home');
@@ -30,32 +26,33 @@ export class HomePage extends React.Component<IProps, IState> {
 	}
 
 	public render() {
-		return <div className={root}>
-			<Card
-				title="Videos"
-				extra={<Link to={PATHS.VIDEOS}>More</Link>}
-				className={card}
-			>
-				Total: {VideosStore.store.state.total}
-			</Card>
+		return (
+			<div className={root}>
+				<Card
+					title="Videos"
+					extra={<Link to={PATHS.VIDEOS}>More</Link>}
+					className={card}
+				>
+					Total: {VideosStore.store.state.total}
+				</Card>
 
-			<Card
-				title="Users"
-				extra={<Link to={PATHS.USERS}>More</Link>}
-				className={card}
-			>
-				Total: {UsersStore.store.state.total}
-			</Card>
-		</div>
+				<Card
+					title="Users"
+					extra={<Link to={PATHS.USERS}>More</Link>}
+					className={card}
+				>
+					Total: {UsersStore.store.state.total}
+				</Card>
+			</div>
+		);
 	}
 }
 
 const root = css`
-  display: flex;
-  justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 `;
 
 const card = css`
-  width: 48%;
+	width: 48%;
 `;
-
