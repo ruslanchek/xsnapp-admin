@@ -26,7 +26,7 @@ export class VideosManager extends Manager {
 			params ? params : {},
 		);
 
-		const videos = result.data['items'].map(item => {
+		const items = result.data['items'].map(item => {
 			return {
 				...item,
 				key: item.id,
@@ -38,13 +38,13 @@ export class VideosManager extends Manager {
 		const total = result.data['total'];
 
 		VideosStore.store.setState({
-			items: videos,
+			items,
 			total,
 			loading: false,
 			fetchParams: params,
 		});
 
-		return { items: videos, total };
+		return { items, total };
 	}
 
 	public async publish(id: number, publish: boolean): Promise<boolean> {

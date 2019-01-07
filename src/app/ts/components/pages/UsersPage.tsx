@@ -3,12 +3,11 @@ import { Avatar, Table } from 'antd';
 import { CONFIG, PATHS } from 'app/ts/config';
 import { css } from 'react-emotion';
 import { managers } from '../../managers';
-import { IVideo, VideosStore } from '../../stores/VideosStore';
 import { followStore } from 'react-stores';
-import { IVideosFetchParams } from '../../managers/VideoManager';
 import { SorterResult } from 'antd/lib/table';
 import { IUser, UsersStore } from '../../stores/UsersStore';
 import { Link } from 'react-router-dom';
+import { IListFetchParams } from '../../managers/ApiManager';
 
 interface IProps {}
 
@@ -39,6 +38,7 @@ export class UsersPage extends React.Component<IProps, IState> {
 				title: 'ID',
 				dataIndex: 'id',
 				key: 'id',
+				width: '5%',
 				sorter: (a, b) => a.id - b.id,
 			},
 
@@ -46,8 +46,9 @@ export class UsersPage extends React.Component<IProps, IState> {
 				title: 'Username',
 				dataIndex: 'username',
 				key: 'username',
+				width: '25%',
 				render: (username, row: IUser) => {
-					if(username) {
+					if (username) {
 						return (
 							<>
 								<Avatar
@@ -56,7 +57,11 @@ export class UsersPage extends React.Component<IProps, IState> {
 									className={avatar}
 									src={`${CONFIG.AVATARS_PATH}/${row.id}/avatar.jpg`}
 								/>
-								<Link to={`${row.id}`}>{username}</Link>
+								<Link
+									to={`${PATHS.USER.replace(':itemId', row.id.toString())}`}
+								>
+									{username}
+								</Link>
 							</>
 						);
 					} else {
@@ -69,6 +74,7 @@ export class UsersPage extends React.Component<IProps, IState> {
 				title: 'E-mail',
 				dataIndex: 'email',
 				key: 'email',
+				width: '45%',
 				sorter: (a, b) => a.email - b.email,
 			},
 
@@ -76,10 +82,13 @@ export class UsersPage extends React.Component<IProps, IState> {
 				title: 'Last seen',
 				dataIndex: 'lastSeen',
 				key: 'lastSeen',
+				width: '25%',
 				sorter: (a, b) => a.lastSeen - b.lastSeen,
 				render: lastSeen => {
 					if (lastSeen) {
-						return <div className={date}>{lastSeen.toLocaleString()}</div>;
+						return (
+							<div className={date}>{new Date(lastSeen).toLocaleString()}</div>
+						);
 					} else {
 						return null;
 					}
@@ -92,9 +101,9 @@ export class UsersPage extends React.Component<IProps, IState> {
 				<Table
 					size="small"
 					pagination={this.state.pagination}
-					loading={VideosStore.store.state.loading}
+					loading={UsersStore.store.state.loading}
 					onChange={this.handleChange}
-					dataSource={VideosStore.store.state.items}
+					dataSource={UsersStore.store.state.items}
 					columns={columns}
 				/>
 			</>
@@ -106,7 +115,7 @@ export class UsersPage extends React.Component<IProps, IState> {
 		filters,
 		sorter: SorterResult<any>,
 	) => {
-		const params: IVideosFetchParams = {};
+		const params: IListFetchParams = {};
 
 		params.orderColumn = sorter.columnKey;
 		params.orderDirection = sorter.order;

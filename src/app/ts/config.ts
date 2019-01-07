@@ -1,6 +1,7 @@
 export const PATHS = {
 	HOME: '/',
 	USERS: '/users',
+	USER: '/users/:itemId',
 	COMMENTS: '/comments',
 	VIDEOS: '/items',
 	VIDEO: '/items/:itemId',
@@ -25,7 +26,7 @@ export const CONFIG = {
 	CONTENT_PATH: 'https://static-xsnapp.ams3.cdn.digitaloceanspaces.com/content',
 	AVATARS_PATH: 'https://static-xsnapp.ams3.cdn.digitaloceanspaces.com/avatars',
 	STORAGE: {
-		PREFIX: 'REALTHUB',
+		PREFIX: 'XSNAPP',
 		COOKIES: {
 			OPTIONS: {
 				domain: '.xsnapp.com',

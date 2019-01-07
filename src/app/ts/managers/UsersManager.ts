@@ -2,7 +2,7 @@ import { Manager } from './Manager';
 import { managers } from '../managers';
 import { EApiRequestType, IListFetchParams } from './ApiManager';
 import { API_PATHS } from '../config';
-import { IVideo, VideosStore } from '../stores/VideosStore';
+import { IUser, UsersStore } from '../stores/UsersStore';
 
 export class UsersManager extends Manager {
 	public reset(): void {}
@@ -15,8 +15,8 @@ export class UsersManager extends Manager {
 
 	public async fetch(
 		params?: IListFetchParams,
-	): Promise<{ items: IVideo[]; total: number }> {
-		VideosStore.store.setState({ loading: true });
+	): Promise<{ items: IUser[]; total: number }> {
+		UsersStore.store.setState({ loading: true });
 
 		const result = await managers.api.request(
 			EApiRequestType.GET,
@@ -24,7 +24,7 @@ export class UsersManager extends Manager {
 			params ? params : {},
 		);
 
-		const videos = result.data['items'].map(item => {
+		const items = result.data['items'].map(item => {
 			return {
 				...item,
 				key: item.id,
@@ -35,14 +35,16 @@ export class UsersManager extends Manager {
 
 		const total = result.data['total'];
 
-		VideosStore.store.setState({
-			items: videos,
+		console.log(items, total);
+
+		UsersStore.store.setState({
+			items,
 			total,
 			loading: false,
 			fetchParams: params,
 		});
 
-		return { items: videos, total };
+		return { items, total };
 	}
 
 	public async publish(id: number, publish: boolean): Promise<boolean> {
