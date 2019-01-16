@@ -88,9 +88,11 @@ export class VideoPage extends React.Component<IProps, IState> {
 			<Row gutter={24}>
 				<Col span={18}>
 					<Form onSubmit={this.handleSubmit}>
-						<Form.Item label="Publish" {...FORM_ITEM_LAYOUT}>
-							<Publish id={itemData.id} publish={itemData.publish} />
-						</Form.Item>
+						{!itemData.corrupted && itemData.processed && itemData.uploaded && itemData.stored && (
+							<Form.Item label="Publish" {...FORM_ITEM_LAYOUT}>
+								<Publish id={itemData.id} publish={itemData.publish} />
+							</Form.Item>
+						)}
 
 						<Form.Item label="Title" {...FORM_ITEM_LAYOUT}>
 							<Input
@@ -229,7 +231,7 @@ export class VideoPage extends React.Component<IProps, IState> {
 									className={preview}
 									onClick={() => {
 										this.setState({
-											modalTitle: `${row.fileName}.${EVideoFileExtension.Jpeg}`,
+											modalTitle: `${row.fileName}${EVideoFileExtension.Jpeg}`,
 											modalContent: <img width="100%" src={previewSrc} />,
 										});
 									}}
@@ -250,7 +252,7 @@ export class VideoPage extends React.Component<IProps, IState> {
 									size="default"
 									onClick={() => {
 										this.setState({
-											modalTitle: `${row.fileName}.${EVideoFileExtension.Mp4}`,
+											modalTitle: `${row.fileName}${EVideoFileExtension.Mp4}`,
 											modalContent: (
 												<video
 													controls={true}

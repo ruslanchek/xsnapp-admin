@@ -71,7 +71,7 @@ export class UsersPage extends React.Component<IProps, IState> {
 			},
 
 			{
-				title: 'E-mail',
+				title: 'Email',
 				dataIndex: 'email',
 				key: 'email',
 				width: '45%',

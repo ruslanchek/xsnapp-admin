@@ -74,7 +74,11 @@ export class VideosPage extends React.Component<IProps, IState> {
 							).replace(EVideoFileExtension.Image, EVideoFileExtension.Jpeg);
 						}
 
-						return <Avatar shape="square" src={previewSrc} />;
+						return (
+							<Link to={`${PATHS.VIDEO.replace(':itemId', row.id.toString())}`}>
+								<Avatar shape="square" src={previewSrc} />
+							</Link>
+						);
 					} else {
 						return null;
 					}
@@ -87,7 +91,11 @@ export class VideosPage extends React.Component<IProps, IState> {
 				key: 'publish',
 				sorter: (a, b) => a.publish - b.publish,
 				render: (publish, row: IVideo) => (
-					<Publish publish={publish} id={row.id} />
+					<>
+						{!row.corrupted && row.processed && row.uploaded && row.stored && (
+							<Publish publish={publish} id={row.id} />
+						)}
+					</>
 				),
 			},
 
@@ -154,7 +162,7 @@ export class VideosPage extends React.Component<IProps, IState> {
 				dataIndex: 'user.username',
 				key: 'user',
 				render: (username, row: IVideo) => {
-					if(username) {
+					if (username) {
 						return (
 							<>
 								<Avatar

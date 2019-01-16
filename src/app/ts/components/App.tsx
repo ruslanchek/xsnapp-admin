@@ -159,6 +159,13 @@ export class App extends React.Component<IProps, IState> {
 										<span>Categories</span>
 									</Link>
 								</Menu.Item>
+
+								<Menu.Item key={PATHS.MAILING}>
+									<Link to={PATHS.MAILING}>
+										<Icon type="mail" />
+										<span>Mailing</span>
+									</Link>
+								</Menu.Item>
 							</Menu>
 						</Sider>
 
