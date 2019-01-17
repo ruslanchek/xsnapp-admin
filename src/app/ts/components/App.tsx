@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { injectGlobal, css } from 'react-emotion';
 import 'antd/dist/antd.css';
-import { Layout, Menu, Icon, Drawer, Badge, Alert } from 'antd';
+import { Layout, Menu, Icon, Drawer, Badge, Alert, Empty } from 'antd';
 import Sider from 'antd/lib/layout/Sider';
 import { PATHS } from '../config';
 import { BrowserRouter, Link } from 'react-router-dom';
@@ -120,33 +120,39 @@ export class App extends React.Component<IProps, IState> {
 							onClose={this.toggleDrawer}
 							visible={StateStore.store.state.showDrawer}
 						>
-							<Alert
-								className={alert}
-								message="Success Text"
-								description="Success Description Success Description Success Description"
-								type="info"
-							/>
+							{EventsStore.store.state.events.length > 0 ? (
+								<>
+									<Alert
+										className={alert}
+										message="Success Text"
+										description="Success Description Success Description Success Description"
+										type="info"
+									/>
 
-							<Alert
-								className={alert}
-								message="Success Text"
-								description="Success Description Success Description Success Description"
-								type="success"
-							/>
+									<Alert
+										className={alert}
+										message="Success Text"
+										description="Success Description Success Description Success Description"
+										type="success"
+									/>
 
-							<Alert
-								className={alert}
-								message="Success Text"
-								description="Success Description Success Description Success Description"
-								type="success"
-							/>
+									<Alert
+										className={alert}
+										message="Success Text"
+										description="Success Description Success Description Success Description"
+										type="success"
+									/>
 
-							<Alert
-								className={alert}
-								message="Success Text"
-								description="Success Description Success Description Success Description"
-								type="success"
-							/>
+									<Alert
+										className={alert}
+										message="Success Text"
+										description="Success Description Success Description Success Description"
+										type="success"
+									/>
+								</>
+							) : (
+								<Empty description={'No events at the moment'} />
+							)}
 						</Drawer>
 
 						<Sider
