@@ -1,11 +1,5 @@
 import * as React from 'react';
-import { managers } from '../../managers';
-import { Button, Card, Col, Form, Input, Row } from 'antd';
-import { followStore } from 'react-stores';
-import { UsersStore } from '../../stores/UsersStore';
-import { VideosStore } from '../../stores/VideosStore';
-import { Link } from 'react-router-dom';
-import { PATHS } from '../../config';
+import { Button, Form, Input } from 'antd';
 import { css } from 'emotion';
 import { FormComponentProps } from 'antd/lib/form';
 
@@ -131,7 +125,7 @@ class Mailing extends React.Component<FormComponentProps, IState> {
 		});
 	}
 
-	private handleSubmit = (e) => {
+	private handleSubmit = e => {
 		e.preventDefault();
 
 		this.props.form.validateFields((err, values) => {
