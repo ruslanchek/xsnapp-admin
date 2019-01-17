@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { managers } from '../../managers';
-import { Card } from 'antd';
+import { Card, Row, Col } from 'antd';
 import { followStore } from 'react-stores';
 import { UsersStore } from '../../stores/UsersStore';
 import { VideosStore } from '../../stores/VideosStore';
@@ -27,32 +27,18 @@ export class HomePage extends React.Component<IProps, IState> {
 
 	public render() {
 		return (
-			<div className={root}>
-				<Card
-					title="Videos"
-					extra={<Link to={PATHS.VIDEOS}>More</Link>}
-					className={card}
-				>
-					Total: {VideosStore.store.state.total}
-				</Card>
-
-				<Card
-					title="Users"
-					extra={<Link to={PATHS.USERS}>More</Link>}
-					className={card}
-				>
-					Total: {UsersStore.store.state.total}
-				</Card>
-			</div>
+			<Row gutter={20}>
+				<Col span={12}>
+					<Card title="Videos" extra={<Link to={PATHS.VIDEOS}>More</Link>}>
+						Total: {VideosStore.store.state.total}
+					</Card>
+				</Col>
+				<Col span={12}>
+					<Card title="Users" extra={<Link to={PATHS.USERS}>More</Link>}>
+						Total: {UsersStore.store.state.total}
+					</Card>
+				</Col>
+			</Row>
 		);
 	}
 }
-
-const root = css`
-	display: flex;
-	justify-content: space-between;
-`;
-
-const card = css`
-	width: 48%;
-`;

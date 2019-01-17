@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, Row, Col } from 'antd';
 import { css } from 'emotion';
 import { FormComponentProps } from 'antd/lib/form';
 
@@ -28,12 +28,12 @@ const DEFAULT_MODEL: IModel = {
 };
 
 const FORM_ITEM_LAYOUT = {
-	labelCol: { span: 4 },
-	wrapperCol: { span: 14 },
+	labelCol: { span: 6 },
+	wrapperCol: { span: 18 },
 };
 
 const FORM_BUTTON_LAYOUT = {
-	wrapperCol: { span: 14, offset: 4, gap: 20 },
+	wrapperCol: { span: 18, offset: 6, gap: 20 },
 };
 
 class Mailing extends React.Component<FormComponentProps, IState> {
@@ -48,63 +48,74 @@ class Mailing extends React.Component<FormComponentProps, IState> {
 
 		return (
 			<div className={root}>
-				<Form layout="horizontal" onSubmit={this.handleSubmit}>
-					<Form.Item label="Email" {...FORM_ITEM_LAYOUT}>
-						<Input
-							onChange={this.setModel.bind(this, 'email')}
-							value={model.email}
-						/>
-					</Form.Item>
+				<Row gutter={20}>
+					<Col span={16}>
+						<Form layout="horizontal" onSubmit={this.handleSubmit}>
+							<Form.Item label="Email" {...FORM_ITEM_LAYOUT}>
+								<Input
+									onChange={this.setModel.bind(this, 'email')}
+									value={model.email}
+								/>
+							</Form.Item>
 
-					<Form.Item label="Subject" {...FORM_ITEM_LAYOUT}>
-						<Input
-							onChange={this.setModel.bind(this, 'subject')}
-							value={model.subject}
-						/>
-					</Form.Item>
+							<Form.Item label="Subject" {...FORM_ITEM_LAYOUT}>
+								<Input
+									onChange={this.setModel.bind(this, 'subject')}
+									value={model.subject}
+								/>
+							</Form.Item>
 
-					<Form.Item label="Title" {...FORM_ITEM_LAYOUT}>
-						<Input
-							onChange={this.setModel.bind(this, 'title')}
-							value={model.title}
-						/>
-					</Form.Item>
+							<Form.Item label="Title" {...FORM_ITEM_LAYOUT}>
+								<Input
+									onChange={this.setModel.bind(this, 'title')}
+									value={model.title}
+								/>
+							</Form.Item>
 
-					<Form.Item label="Body" {...FORM_ITEM_LAYOUT}>
-						<Input
-							onChange={this.setModel.bind(this, 'body')}
-							value={model.body}
-						/>
-					</Form.Item>
+							<Form.Item label="Body" {...FORM_ITEM_LAYOUT}>
+								<Input.TextArea
+									rows={8}
+									onChange={this.setModel.bind(this, 'body')}
+									value={model.body}
+								/>
+							</Form.Item>
 
-					<Form.Item label="Button text" {...FORM_ITEM_LAYOUT}>
-						<Input
-							onChange={this.setModel.bind(this, 'buttonText')}
-							value={model.buttonText}
-						/>
-					</Form.Item>
+							<Form.Item label="Button text" {...FORM_ITEM_LAYOUT}>
+								<Input
+									onChange={this.setModel.bind(this, 'buttonText')}
+									value={model.buttonText}
+								/>
+							</Form.Item>
 
-					<Form.Item label="Button URL" {...FORM_ITEM_LAYOUT}>
-						<Input
-							onChange={this.setModel.bind(this, 'buttonUrl')}
-							value={model.buttonUrl}
-						/>
-					</Form.Item>
+							<Form.Item label="Button URL" {...FORM_ITEM_LAYOUT}>
+								<Input
+									onChange={this.setModel.bind(this, 'buttonUrl')}
+									value={model.buttonUrl}
+								/>
+							</Form.Item>
 
-					<Form.Item {...FORM_BUTTON_LAYOUT}>
-						<Button style={{ marginRight: 8 }} htmlType="submit" type="primary">
-							Send
-						</Button>
+							<Form.Item {...FORM_BUTTON_LAYOUT}>
+								<Button
+									style={{ marginRight: 8 }}
+									htmlType="submit"
+									type="primary"
+								>
+									Send
+								</Button>
 
-						<Button
-							htmlType="button"
-							type="default"
-							onClick={this.resetForm.bind(this)}
-						>
-							Clear
-						</Button>
-					</Form.Item>
-				</Form>
+								<Button
+									htmlType="button"
+									type="default"
+									onClick={this.resetForm.bind(this)}
+								>
+									Clear
+								</Button>
+							</Form.Item>
+						</Form>
+					</Col>
+
+					<Col span={8}>xxx</Col>
+				</Row>
 			</div>
 		);
 	}

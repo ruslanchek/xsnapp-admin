@@ -10,7 +10,8 @@ export namespace StateStore {
 		appReady: boolean;
 		title: string;
 		breadcrumbs: IBreadcrumb[];
-		routeParams: any,
+		routeParams: any;
+		showDrawer: boolean;
 	}
 
 	export const initialState: IState = {
@@ -18,6 +19,7 @@ export namespace StateStore {
 		title: '',
 		breadcrumbs: [],
 		routeParams: {},
+		showDrawer: false,
 	};
 
 	export let store: Store<IState> = new Store<IState>(initialState);

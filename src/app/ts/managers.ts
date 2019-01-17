@@ -4,6 +4,7 @@ import { StateStore } from './stores/StateStore';
 import { ApiManager } from './managers/ApiManager';
 import { VideosManager } from './managers/VideosManager';
 import { UsersManager } from './managers/UsersManager';
+import { EventsManager } from './managers/EventsManager';
 
 export class Managers {
 	public route: RouteManager;
@@ -11,6 +12,7 @@ export class Managers {
 	public api: ApiManager;
 	public videos: VideosManager;
 	public users: UsersManager;
+	public events: EventsManager;
 
 	private initStartTime: number = 0;
 
@@ -20,6 +22,7 @@ export class Managers {
 		this.api = new ApiManager();
 		this.videos = new VideosManager();
 		this.users = new UsersManager();
+		this.events = new EventsManager();
 
 		this.init();
 	}
@@ -56,6 +59,7 @@ export class Managers {
 		this.api.reset();
 		this.videos.reset();
 		this.users.reset();
+		this.events.reset();
 	}
 
 	private async initManagers(): Promise<any> {
@@ -73,6 +77,9 @@ export class Managers {
 
 		await this.users.init();
 		this.logTime('UsersManager ready');
+
+		await this.events.init();
+		this.logTime('EventsManager ready');
 	}
 }
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { injectGlobal } from 'react-emotion';
+import { injectGlobal, css } from 'react-emotion';
 import 'antd/dist/antd.css';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Icon, Drawer, Badge, Alert } from 'antd';
 import Sider from 'antd/lib/layout/Sider';
 import { PATHS } from '../config';
 import { BrowserRouter, Link } from 'react-router-dom';
@@ -9,6 +9,7 @@ import { Routes } from './Routes';
 import { StateStore } from '../stores/StateStore';
 import { followStore } from 'react-stores';
 import { PersistentStore } from '../stores/PersistentStore';
+import { EventsStore } from '../stores/EventsStore';
 
 const { Header } = Layout;
 
@@ -92,16 +93,13 @@ interface IProps {
 	collapsed: boolean;
 }
 
-interface IState {
-
-}
+interface IState {}
 
 @followStore(StateStore.store)
 @followStore(PersistentStore.store)
+@followStore(EventsStore.store)
 export class App extends React.Component<IProps, IState> {
-	public state: IState = {
-
-	};
+	public state: IState = {};
 
 	constructor(props) {
 		super(props);
@@ -113,18 +111,66 @@ export class App extends React.Component<IProps, IState> {
 			return (
 				<BrowserRouter>
 					<Layout>
-						<Sider trigger={null} collapsible collapsed={PersistentStore.store.state.menuCollapsed}>
+						<Drawer
+							width={450}
+							title="Events"
+							placement="right"
+							closable={true}
+							destroyOnClose={true}
+							onClose={this.toggleDrawer}
+							visible={StateStore.store.state.showDrawer}
+						>
+							<Alert
+								className={alert}
+								message="Success Text"
+								description="Success Description Success Description Success Description"
+								type="info"
+							/>
+
+							<Alert
+								className={alert}
+								message="Success Text"
+								description="Success Description Success Description Success Description"
+								type="success"
+							/>
+
+							<Alert
+								className={alert}
+								message="Success Text"
+								description="Success Description Success Description Success Description"
+								type="success"
+							/>
+
+							<Alert
+								className={alert}
+								message="Success Text"
+								description="Success Description Success Description Success Description"
+								type="success"
+							/>
+						</Drawer>
+
+						<Sider
+							trigger={null}
+							collapsible
+							collapsed={PersistentStore.store.state.menuCollapsed}
+						>
 							<Link
 								to={PATHS.HOME}
 								className={
-									PersistentStore.store.state.menuCollapsed ? 'header-logo shrink' : 'header-logo'
+									PersistentStore.store.state.menuCollapsed
+										? 'header-logo shrink'
+										: 'header-logo'
 								}
 							>
 								<span className="logo" />
 								<h1>Admin</h1>
 							</Link>
 
-							<Menu theme="dark" mode="inline" defaultSelectedKeys={[location.pathname]}>
+							<Menu
+								theme="dark"
+								mode="inline"
+								defaultSelectedKeys={[location.pathname]}
+							>
 								<Menu.Item key={PATHS.HOME}>
 									<Link to={PATHS.HOME}>
 										<Icon type="home" />
@@ -170,12 +216,28 @@ export class App extends React.Component<IProps, IState> {
 						</Sider>
 
 						<Layout>
-							<Header className={PersistentStore.store.state.menuCollapsed ? 'shrink' : ''}>
-								<Icon
-									className="trigger"
-									type={PersistentStore.store.state.menuCollapsed ? 'menu-unfold' : 'menu-fold'}
-									onClick={this.toggle}
-								/>
+							<Header
+								className={
+									PersistentStore.store.state.menuCollapsed ? 'shrink' : ''
+								}
+							>
+								<div className={inner}>
+									<Icon
+										className="trigger"
+										type={
+											PersistentStore.store.state.menuCollapsed
+												? 'menu-unfold'
+												: 'menu-fold'
+										}
+										onClick={this.toggle}
+									/>
+
+									<Badge count={EventsStore.store.state.events.length}>
+										<div onClick={this.toggleDrawer} className={label}>
+											<Icon className={labelIcon} type="message" />
+										</div>
+									</Badge>
+								</div>
 							</Header>
 							<Routes />
 						</Layout>
@@ -192,4 +254,41 @@ export class App extends React.Component<IProps, IState> {
 			menuCollapsed: !PersistentStore.store.state.menuCollapsed,
 		});
 	};
+
+	private toggleDrawer = () => {
+		StateStore.store.setState({
+			showDrawer: !StateStore.store.state.showDrawer,
+		});
+	};
 }
+
+const label = css`
+	background-color: #eeeeee;
+	height: 36px;
+	width: 36px;
+	border-radius: 4px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	transition: background-color 0.1s;
+
+	&:hover {
+		background-color: #ccc;
+	}
+`;
+
+const labelIcon = css`
+	font-size: 20px;
+`;
+
+const inner = css`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 100%;
+`;
+
+const alert = css`
+	margin-bottom: 20px;
+`;
