@@ -7,6 +7,7 @@ import { VideosStore } from '../../stores/VideosStore';
 import { Link } from 'react-router-dom';
 import { PATHS } from '../../config';
 import { css } from 'emotion';
+import { FormComponentProps } from 'antd/lib/form';
 
 interface IProps {}
 
@@ -41,7 +42,7 @@ const FORM_BUTTON_LAYOUT = {
 	wrapperCol: { span: 14, offset: 4, gap: 20 },
 };
 
-export class MailingPage extends React.Component<IProps, IState> {
+class Mailing extends React.Component<FormComponentProps, IState> {
 	public state: IState = {
 		model: { ...DEFAULT_MODEL },
 	};
@@ -53,7 +54,7 @@ export class MailingPage extends React.Component<IProps, IState> {
 
 		return (
 			<div className={root}>
-				<Form layout="horizontal">
+				<Form layout="horizontal" onSubmit={this.handleSubmit}>
 					<Form.Item label="Email" {...FORM_ITEM_LAYOUT}>
 						<Input
 							onChange={this.setModel.bind(this, 'email')}
@@ -117,8 +118,6 @@ export class MailingPage extends React.Component<IProps, IState> {
 	private setModel(name, event) {
 		const model = this.state.model;
 
-		console.log(name, event);
-
 		model[name] = event.target.value;
 
 		this.setState({
@@ -131,6 +130,16 @@ export class MailingPage extends React.Component<IProps, IState> {
 			model: { ...DEFAULT_MODEL },
 		});
 	}
+
+	private handleSubmit = (e) => {
+		e.preventDefault();
+
+		this.props.form.validateFields((err, values) => {
+			console.log('Received values of form: ', values);
+		});
+	};
 }
+
+export const MailingPage = Form.create({})(Mailing);
 
 const root = css``;
