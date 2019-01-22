@@ -12,20 +12,51 @@ const FETCHING_INTERVAL = 5000;
 const FETCH_NEW_PARAMS: IListFetchParams = {
 	page: 1,
 	number: 10,
-	orderColumn: 'date',
+	orderColumn: 'id',
 	orderDirection: 'descend',
 };
 
 export class EventsManager {
+	private fetchingInterval = null;
+
 	public reset(): void {
 		this.stopFetchingGLobal();
 	}
 
-	private fetchingInterval = null;
-
 	public init(): Promise<any> {
 		this.startFetchingGlobal();
 		return Promise.resolve();
+	}
+
+	public async setRead(id: number) {
+		this.fetch();
+		this.fetchNew();
+	}
+
+	public async fetch(
+		params?: IListFetchParams,
+	): Promise<{ items: IEvent[]; total: number }> {
+		EventsStore.store.setState({
+			loading: true,
+		});
+
+		const result = await managers.api.request(
+			EApiRequestType.GET,
+			API_PATHS.GET_EVENTS,
+			params ? params : EventsStore.store.state.fetchParams,
+		);
+
+		const total = result.data['total'];
+		const items = this.mapItems(result.data['items']);
+
+		EventsStore.store.setState({
+			items,
+			total,
+			loading: false,
+			fetchParams: params,
+		});
+
+		return { items, total };
 	}
 
 	private startFetchingGlobal() {
@@ -64,36 +95,5 @@ export class EventsManager {
 			itemsNew,
 			totalNew,
 		});
-	}
-
-	public async setRead(id: number) {
-		this.fetch();
-		this.fetchNew();
-	}
-
-	public async fetch(
-		params?: IListFetchParams,
-	): Promise<{ items: IEvent[]; total: number }> {
-		EventsStore.store.setState({
-			loading: true,
-		});
-
-		const result = await managers.api.request(
-			EApiRequestType.GET,
-			API_PATHS.GET_EVENTS,
-			params ? params : EventsStore.store.state.fetchParams,
-		);
-
-		const total = result.data['total'];
-		const items = this.mapItems(result.data['items']);
-
-		EventsStore.store.setState({
-			items,
-			total,
-			loading: false,
-			fetchParams: params,
-		});
-
-		return { items, total };
 	}
 }
