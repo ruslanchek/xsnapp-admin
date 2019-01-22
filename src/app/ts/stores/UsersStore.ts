@@ -19,7 +19,12 @@ export namespace UsersStore {
 	export const initialState: IState = {
 		items: [],
 		total: 0,
-		fetchParams: {},
+		fetchParams: {
+			page: 1,
+			number: 10,
+			orderColumn: 'id',
+			orderDirection: 'descend',
+		},
 		loading: false,
 	};
 

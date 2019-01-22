@@ -21,21 +21,18 @@ export class UsersManager extends Manager {
 		const result = await managers.api.request(
 			EApiRequestType.GET,
 			API_PATHS.GET_USERS,
-			params ? params : {},
+			params ? params : UsersStore.store.state.fetchParams,
 		);
 
 		const items = result.data['items'].map(item => {
 			return {
 				...item,
 				key: item.id,
-				processedDate: new Date(item.processedDate),
-				uploadedDate: new Date(item.uploadedDate),
+				lastSeen: new Date(item.lastSeen),
 			};
 		});
 
 		const total = result.data['total'];
-
-		console.log(items, total);
 
 		UsersStore.store.setState({
 			items,

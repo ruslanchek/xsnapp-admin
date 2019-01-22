@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { injectGlobal, css } from 'react-emotion';
 import 'antd/dist/antd.css';
-import { Layout, Menu, Icon, Drawer, Badge, Alert, Empty } from 'antd';
+import { Layout, Menu, Icon, Drawer, Badge, Empty } from 'antd';
 import Sider from 'antd/lib/layout/Sider';
 import { PATHS } from '../config';
 import { BrowserRouter, Link } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { StateStore } from '../stores/StateStore';
 import { followStore } from 'react-stores';
 import { PersistentStore } from '../stores/PersistentStore';
 import { EventsStore } from '../stores/EventsStore';
+import { SystemEvent } from './ui/SystemEvent';
 
 const { Header } = Layout;
 
@@ -120,35 +121,11 @@ export class App extends React.Component<IProps, IState> {
 							onClose={this.toggleDrawer}
 							visible={StateStore.store.state.showDrawer}
 						>
-							{EventsStore.store.state.events.length > 0 ? (
+							{EventsStore.store.state.totalNew > 0 ? (
 								<>
-									<Alert
-										className={alert}
-										message="Success Text"
-										description="Success Description Success Description Success Description"
-										type="info"
-									/>
-
-									<Alert
-										className={alert}
-										message="Success Text"
-										description="Success Description Success Description Success Description"
-										type="success"
-									/>
-
-									<Alert
-										className={alert}
-										message="Success Text"
-										description="Success Description Success Description Success Description"
-										type="success"
-									/>
-
-									<Alert
-										className={alert}
-										message="Success Text"
-										description="Success Description Success Description Success Description"
-										type="success"
-									/>
+									{EventsStore.store.state.itemsNew.map((event, i) => {
+										return <SystemEvent key={i} event={event} />;
+									})}
 								</>
 							) : (
 								<Empty description={'No events at the moment'} />
@@ -238,7 +215,7 @@ export class App extends React.Component<IProps, IState> {
 										onClick={this.toggle}
 									/>
 
-									<Badge count={EventsStore.store.state.events.length}>
+									<Badge count={EventsStore.store.state.totalNew}>
 										<div onClick={this.toggleDrawer} className={label}>
 											<Icon className={labelIcon} type="message" />
 										</div>
@@ -293,8 +270,4 @@ const inner = css`
 	justify-content: space-between;
 	align-items: center;
 	height: 100%;
-`;
-
-const alert = css`
-	margin-bottom: 20px;
 `;

@@ -23,7 +23,7 @@ export class VideosManager extends Manager {
 		const result = await managers.api.request(
 			EApiRequestType.GET,
 			API_PATHS.GET_ITEMS,
-			params ? params : {},
+			params ? params : VideosStore.store.state.fetchParams,
 		);
 
 		const items = result.data['items'].map(item => {

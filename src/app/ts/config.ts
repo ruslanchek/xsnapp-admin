@@ -12,6 +12,7 @@ export const PATHS = {
 
 export const API_PATHS = {
 	GET_ITEMS: '/admin/items',
+	GET_EVENTS: '/admin/events',
 	GET_ITEM: '/admin/item/:itemId',
 	EDIT_ITEM: '/admin/item/:itemId',
 	GET_USERS: '/admin/users',
