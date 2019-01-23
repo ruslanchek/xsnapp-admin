@@ -54,6 +54,8 @@ export class VideosManager extends Manager {
 			{ id, publish },
 		);
 
+		this.fetch(VideosStore.store.state.fetchParams);
+
 		if (result && result.data && result.data['item']) {
 			return result.data['item'].publish;
 		}
