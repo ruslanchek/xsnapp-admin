@@ -58,6 +58,12 @@ module.exports = {
 
 	watch: true,
 
+	watchOptions: {
+		aggregateTimeout: 300,
+		poll: 1000,
+		ignored: ['dist', 'node_modules'],
+	},
+
 	devServer: {
 		contentBase: path.join(__dirname, 'dist'),
 		compress: false,
