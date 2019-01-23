@@ -88,11 +88,14 @@ export class VideoPage extends React.Component<IProps, IState> {
 			<Row gutter={24}>
 				<Col span={18}>
 					<Form onSubmit={this.handleSubmit}>
-						{!itemData.corrupted && itemData.processed && itemData.uploaded && itemData.stored && (
-							<Form.Item label="Publish" {...FORM_ITEM_LAYOUT}>
-								<Publish id={itemData.id} publish={itemData.publish} />
-							</Form.Item>
-						)}
+						{!itemData.corrupted &&
+							itemData.processed &&
+							itemData.uploaded &&
+							itemData.stored && (
+								<Form.Item label="Publish" {...FORM_ITEM_LAYOUT}>
+									<Publish id={itemData.id} publish={itemData.publish} />
+								</Form.Item>
+							)}
 
 						<Form.Item label="Title" {...FORM_ITEM_LAYOUT}>
 							<Input
@@ -366,14 +369,19 @@ export class VideoPage extends React.Component<IProps, IState> {
 
 	private get getVideoInfoItems() {
 		const { itemData } = this.state;
+		const tzOffset = new Date().getTimezoneOffset() * 1000 * 60;
+		const uploadedDate = new Date(itemData.uploadedDate);
+		let processedDate = new Date();
 
-		const processedDate = itemData.processedDate
-			? new Date(itemData.processedDate)
-			: new Date();
+		if (itemData.processedDate) {
+			processedDate = new Date(itemData.processedDate);
+			processedDate.setTime(processedDate.getTime() - tzOffset);
+		}
+
+		uploadedDate.setTime(uploadedDate.getTime() - tzOffset);
 
 		const processingTime =
-			(processedDate.getTime() - new Date(itemData.uploadedDate).getTime()) /
-			1000;
+			(processedDate.getTime() - uploadedDate.getTime()) / 1000;
 
 		return [
 			{
@@ -433,13 +441,11 @@ export class VideoPage extends React.Component<IProps, IState> {
 			},
 			{
 				title: 'Uploaded date',
-				value: new Date(itemData.uploadedDate).toLocaleString(),
+				value: uploadedDate.toLocaleString(),
 			},
 			{
 				title: 'Processed date',
-				value:
-					itemData.processedDate &&
-					new Date(itemData.processedDate).toLocaleString(),
+				value: itemData.processedDate ? processedDate.toLocaleString() : '–',
 			},
 			{
 				title: 'Processing time',
