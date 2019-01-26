@@ -419,25 +419,32 @@ export class VideoPage extends React.Component<IProps, IState> {
 			},
 			{
 				title: 'Duration',
-				value: Utils.convertSecondsToTimeString(parseFloat(itemData.duration)),
+				value:
+					parseFloat(itemData.duration) > 0
+						? Utils.convertSecondsToTimeString(parseFloat(itemData.duration))
+						: null,
 			},
 			{
 				title: 'Sizes',
-				value: (
-					<>
-						{itemData.videoFiles
-							.filter(file => {
-								return file.type === EVideoFileKind.Video;
-							})
-							.map((file, i) => {
-								return <Tag key={i}>{file.fileName}</Tag>;
-							})}
-					</>
-				),
+				value:
+					itemData.videoFiles.length > 0 ? (
+						<>
+							{itemData.videoFiles
+								.filter(file => {
+									return file.type === EVideoFileKind.Video;
+								})
+								.map((file, i) => {
+									return <Tag key={i}>{file.fileName}</Tag>;
+								})}
+						</>
+					) : null,
 			},
 			{
 				title: 'Average frame rate',
-				value: `${itemData.avgFrameRate} FPS`,
+				value:
+					parseFloat(itemData.avgFrameRate) > 0
+						? `${itemData.avgFrameRate} FPS`
+						: null,
 			},
 			{
 				title: 'Uploaded date',
@@ -445,7 +452,7 @@ export class VideoPage extends React.Component<IProps, IState> {
 			},
 			{
 				title: 'Processed date',
-				value: itemData.processedDate ? processedDate.toLocaleString() : '–',
+				value: itemData.processedDate ? processedDate.toLocaleString() : null,
 			},
 			{
 				title: 'Processing time',
