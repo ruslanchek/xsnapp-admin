@@ -20,6 +20,7 @@ export const API_PATHS = {
 	EDIT_USER: '/admin/users/:itemId',
 	GET_COMMENTS: '/comments/:itemId',
 	ADD_COMMENT: '/comments',
+	GET_USER_ITEMS: '/user/items'
 };
 
 export const CONFIG = {
