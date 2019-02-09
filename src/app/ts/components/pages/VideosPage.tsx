@@ -100,6 +100,9 @@ export class VideosPage extends React.Component<IProps, IState> {
 								id={row.id}
 								publish={row.publish}
 								onChange={managers.videos.publish}
+								onAfterChange={async () => {
+									await managers.videos.fetch(VideosStore.store.state.fetchParams);
+								}}
 							/>
 						)}
 					</>

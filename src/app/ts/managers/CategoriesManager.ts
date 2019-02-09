@@ -46,8 +46,6 @@ export class CategoriesManager extends Manager {
 			{ id, publish },
 		);
 
-		this.fetch(CategoriesStore.store.state.fetchParams);
-
 		if (result && result.data && result.data['item']) {
 			return result.data['item'].publish;
 		}

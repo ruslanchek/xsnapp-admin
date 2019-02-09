@@ -9,6 +9,7 @@ import { SorterResult } from 'antd/lib/table';
 import { IListFetchParams } from '../../managers/ApiManager';
 import { CategoriesStore, ICategory } from '../../stores/CategoriesStore';
 import { EBreadcrumbsType } from '../../stores/StateStore';
+import { VideosStore } from '../../stores/VideosStore';
 
 interface IProps {}
 
@@ -61,6 +62,9 @@ export class CategoriesPage extends React.Component<IProps, IState> {
 							id={row.id}
 							publish={row.publish}
 							onChange={managers.categories.publish}
+							onAfterChange={async () => {
+								await managers.categories.fetch(CategoriesStore.store.state.fetchParams);
+							}}
 						/>
 					</>
 				),

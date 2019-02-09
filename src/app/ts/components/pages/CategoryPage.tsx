@@ -71,6 +71,15 @@ export class CategoryPage extends React.Component<IProps, IState> {
 								id={itemData.id}
 								publish={itemData.publish}
 								onChange={managers.categories.publish}
+								onAfterChange={(publish: boolean) => {
+									const data = this.state.itemData;
+
+									data.publish = publish;
+
+									this.setState({
+										itemData: data
+									});
+								}}
 							/>
 						</Form.Item>
 

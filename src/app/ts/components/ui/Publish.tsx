@@ -6,6 +6,7 @@ interface IProps {
 	id: number;
 	publish: boolean;
 	onChange: (id: number, publish: boolean) => Promise<boolean>;
+	onAfterChange: (publish: boolean) => void;
 }
 
 interface IState {
@@ -59,5 +60,7 @@ export class Publish extends React.PureComponent<IProps, {}> {
 			loading: false,
 			publish,
 		});
+
+		this.props.onAfterChange(publish);
 	};
 }

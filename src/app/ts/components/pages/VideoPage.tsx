@@ -4,7 +4,7 @@ import { followStore } from 'react-stores';
 import { API_PATHS, CONFIG, PATHS } from '../../config';
 import { EBreadcrumbsType, StateStore } from '../../stores/StateStore';
 import { EApiRequestType } from '../../managers/ApiManager';
-import { IVideo, IVideoFile } from '../../stores/VideosStore';
+import { IVideo, IVideoFile, VideosStore } from '../../stores/VideosStore';
 import { Avatar, Button, Col, Form, Input, Modal, Row, Table, Tag } from 'antd';
 import { Utils } from '../../lib/Utils';
 import { css } from 'emotion';
@@ -86,6 +86,15 @@ export class VideoPage extends React.Component<IProps, IState> {
 										id={itemData.id}
 										publish={itemData.publish}
 										onChange={managers.videos.publish}
+										onAfterChange={(publish: boolean) => {
+											const data = this.state.itemData;
+
+											data.publish = publish;
+
+											this.setState({
+												itemData: data
+											});
+										}}
 									/>
 								</Form.Item>
 							)}
