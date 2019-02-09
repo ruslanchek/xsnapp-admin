@@ -7,6 +7,7 @@ import { VideosPage } from './pages/VideosPage';
 import { VideoPage } from './pages/VideoPage';
 import { UsersPage } from './pages/UsersPage';
 import { MailingPage } from './pages/MailingPage';
+import { CategoriesPage } from './pages/CategoriesPage';
 
 interface IState {
 	key: number;
@@ -19,18 +20,6 @@ export class Routes extends React.Component<{}, IState> {
 				<Route
 					exact={true}
 					path={PATHS.HOME}
-					render={props => {
-						return (
-							<Page {...props}>
-								<HomePage />
-							</Page>
-						);
-					}}
-				/>
-
-				<Route
-					exact={true}
-					path={PATHS.CATEGORIES}
 					render={props => {
 						return (
 							<Page {...props}>
@@ -90,11 +79,11 @@ export class Routes extends React.Component<{}, IState> {
 
 				<Route
 					exact={true}
-					path={PATHS.MAILING}
+					path={PATHS.CATEGORIES}
 					render={props => {
 						return (
 							<Page {...props}>
-								<MailingPage />
+								<CategoriesPage />
 							</Page>
 						);
 					}}

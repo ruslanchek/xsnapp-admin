@@ -2,9 +2,9 @@ import { Manager } from './Manager';
 import { managers } from '../managers';
 import { EApiRequestType, IListFetchParams } from './ApiManager';
 import { API_PATHS } from '../config';
-import { IVideo, VideosStore } from '../stores/VideosStore';
+import { CategoriesStore, ICategory } from '../stores/CategoriesStore';
 
-export class VideosManager extends Manager {
+export class CategoriesManager extends Manager {
 	public reset(): void {}
 
 	public init(): Promise<any> {
@@ -15,29 +15,21 @@ export class VideosManager extends Manager {
 
 	public async fetch(
 		params?: IListFetchParams,
-	): Promise<{ items: IVideo[]; total: number }> {
-		VideosStore.store.setState({
+	): Promise<{ items: ICategory[]; total: number }> {
+		CategoriesStore.store.setState({
 			loading: true,
 		});
 
 		const result = await managers.api.request(
 			EApiRequestType.GET,
-			API_PATHS.GET_ITEMS,
-			params ? params : VideosStore.store.state.fetchParams,
+			API_PATHS.GET_CATEGORIES,
+			params ? params : CategoriesStore.store.state.fetchParams,
 		);
 
-		const items = result.data['items'].map(item => {
-			return {
-				...item,
-				key: item.id,
-				processedDate: new Date(item.processedDate),
-				uploadedDate: new Date(item.uploadedDate),
-			};
-		});
-
+		const items = result.data['items'];
 		const total = result.data['total'];
 
-		VideosStore.store.setState({
+		CategoriesStore.store.setState({
 			items,
 			total,
 			loading: false,
@@ -50,11 +42,11 @@ export class VideosManager extends Manager {
 	public publish = async (id: number, publish: boolean): Promise<boolean> => {
 		const result = await managers.api.request(
 			EApiRequestType.POST,
-			API_PATHS.EDIT_ITEM.replace(':itemId', id.toString()),
+			API_PATHS.EDIT_CATEGORY.replace(':itemId', id.toString()),
 			{ id, publish },
 		);
 
-		this.fetch(VideosStore.store.state.fetchParams);
+		this.fetch(CategoriesStore.store.state.fetchParams);
 
 		if (result && result.data && result.data['item']) {
 			return result.data['item'].publish;
@@ -63,10 +55,10 @@ export class VideosManager extends Manager {
 		return publish;
 	};
 
-	public async edit(id: number, data: Partial<IVideo>): Promise<boolean> {
+	public async edit(id: number, data: Partial<ICategory>): Promise<boolean> {
 		const result = await managers.api.request(
 			EApiRequestType.POST,
-			API_PATHS.EDIT_ITEM.replace(':itemId', id.toString()),
+			API_PATHS.EDIT_CATEGORY.replace(':itemId', id.toString()),
 			data,
 		);
 

@@ -6,13 +6,18 @@ export const PATHS = {
 	VIDEOS: '/items',
 	VIDEO: '/items/:itemId',
 	CATEGORIES: '/categories',
+	CATEGORY: '/category',
 	MAILING: '/mailing',
 	NOT_FOUND: '/404',
 };
 
 export const API_PATHS = {
-	GET_ITEMS: '/admin/items',
+	GET_CATEGORIES: '/admin/categories',
+	GET_CATEGORY: '/admin/categories/:itemId',
+	EDIT_CATEGORY: '/admin/categories/:itemId',
+	CREATE_CATEGORY: '/admin/categories',
 	GET_EVENTS: '/admin/events',
+	GET_ITEMS: '/admin/items',
 	GET_ITEM: '/admin/items/:itemId',
 	EDIT_ITEM: '/admin/items/:itemId',
 	GET_USERS: '/admin/users',

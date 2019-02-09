@@ -5,6 +5,7 @@ import { managers } from '../../managers';
 interface IProps {
 	id: number;
 	publish: boolean;
+	onChange: (id: number, publish: boolean) => Promise<boolean>;
 }
 
 interface IState {
@@ -49,7 +50,7 @@ export class Publish extends React.PureComponent<IProps, {}> {
 			loading: true,
 		});
 
-		const publish = await managers.videos.publish(
+		const publish = await this.props.onChange(
 			this.props.id,
 			!this.state.publish,
 		);

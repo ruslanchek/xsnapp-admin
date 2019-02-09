@@ -93,7 +93,7 @@ export class VideosPage extends React.Component<IProps, IState> {
 				render: (publish, row: IVideo) => (
 					<>
 						{!row.corrupted && row.processed && row.uploaded && row.stored && (
-							<Publish publish={publish} id={row.id} />
+							<Publish id={row.id} publish={row.publish} onChange={managers.videos.publish} />
 						)}
 					</>
 				),
@@ -171,7 +171,7 @@ export class VideosPage extends React.Component<IProps, IState> {
 									className={avatar}
 									src={`${CONFIG.AVATARS_PATH}/${row.user.id}/avatar.jpg`}
 								/>
-								<Link to={`${row.user.id}`}>{username}</Link>
+								<Link to={`${PATHS.USER.replace(':itemId', row.user.id.toString())}`}>{username}</Link>
 							</>
 						);
 					} else {

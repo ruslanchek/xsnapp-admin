@@ -93,7 +93,7 @@ export class VideoPage extends React.Component<IProps, IState> {
 							itemData.uploaded &&
 							itemData.stored && (
 								<Form.Item label="Publish" {...FORM_ITEM_LAYOUT}>
-									<Publish id={itemData.id} publish={itemData.publish} />
+									<Publish id={itemData.id} publish={itemData.publish} onChange={managers.videos.publish} />
 								</Form.Item>
 							)}
 

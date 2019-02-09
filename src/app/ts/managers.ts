@@ -5,25 +5,20 @@ import { ApiManager } from './managers/ApiManager';
 import { VideosManager } from './managers/VideosManager';
 import { UsersManager } from './managers/UsersManager';
 import { EventsManager } from './managers/EventsManager';
+import { CategoriesManager } from './managers/CategoriesManager';
 
 export class Managers {
-	public route: RouteManager;
-	public storage: StorageManager;
-	public api: ApiManager;
-	public videos: VideosManager;
-	public users: UsersManager;
-	public events: EventsManager;
+	public readonly route = new RouteManager();
+	public readonly storage = new StorageManager();
+	public readonly api = new ApiManager();
+	public readonly videos = new VideosManager();
+	public readonly categories = new CategoriesManager();
+	public readonly users = new UsersManager();
+	public readonly events = new EventsManager();
 
 	private initStartTime: number = 0;
 
 	public constructor() {
-		this.route = new RouteManager();
-		this.storage = new StorageManager();
-		this.api = new ApiManager();
-		this.videos = new VideosManager();
-		this.users = new UsersManager();
-		this.events = new EventsManager();
-
 		this.init();
 	}
 
@@ -58,6 +53,7 @@ export class Managers {
 		this.storage.reset();
 		this.api.reset();
 		this.videos.reset();
+		this.categories.reset();
 		this.users.reset();
 		this.events.reset();
 	}
@@ -74,6 +70,9 @@ export class Managers {
 
 		await this.videos.init();
 		this.logTime('VideosManager ready');
+
+		await this.categories.init();
+		this.logTime('CategoriesManager ready');
 
 		await this.users.init();
 		this.logTime('UsersManager ready');
