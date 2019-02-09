@@ -6,7 +6,7 @@ export const PATHS = {
 	VIDEOS: '/items',
 	VIDEO: '/items/:itemId',
 	CATEGORIES: '/categories',
-	CATEGORY: '/category',
+	CATEGORY: '/category/:itemId',
 	MAILING: '/mailing',
 	NOT_FOUND: '/404',
 };

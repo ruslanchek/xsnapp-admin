@@ -3,6 +3,13 @@ import { Store } from 'react-stores';
 export interface IBreadcrumb {
 	title: string;
 	path: string;
+	type: EBreadcrumbsType;
+}
+
+export enum EBreadcrumbsType {
+	Default,
+	Home,
+	Tag,
 }
 
 export namespace StateStore {

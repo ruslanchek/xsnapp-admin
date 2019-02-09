@@ -6,7 +6,6 @@ import { UsersStore } from '../../stores/UsersStore';
 import { VideosStore } from '../../stores/VideosStore';
 import { Link } from 'react-router-dom';
 import { PATHS } from '../../config';
-import { css } from 'emotion';
 
 interface IProps {}
 

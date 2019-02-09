@@ -2,21 +2,10 @@ import * as React from 'react';
 import { managers } from '../../managers';
 import { followStore } from 'react-stores';
 import { API_PATHS, CONFIG, PATHS } from '../../config';
-import { StateStore } from '../../stores/StateStore';
+import { EBreadcrumbsType, StateStore } from '../../stores/StateStore';
 import { EApiRequestType } from '../../managers/ApiManager';
 import { IVideo, IVideoFile } from '../../stores/VideosStore';
-import {
-	Avatar,
-	Button,
-	Col,
-	Form,
-	Icon,
-	Input,
-	Modal,
-	Row,
-	Table,
-	Tag,
-} from 'antd';
+import { Avatar, Button, Col, Form, Input, Modal, Row, Table, Tag } from 'antd';
 import { Utils } from '../../lib/Utils';
 import { css } from 'emotion';
 import { ItemInfo } from '../ui/ItemInfo';
@@ -34,7 +23,7 @@ interface IState {
 	itemId: string;
 	itemData: IVideo;
 	modalContent: React.ReactNode;
-	modalTitle: string;
+	modalTitle: string | React.ReactNode;
 	loading: boolean;
 }
 
@@ -93,7 +82,11 @@ export class VideoPage extends React.Component<IProps, IState> {
 							itemData.uploaded &&
 							itemData.stored && (
 								<Form.Item label="Publish" {...FORM_ITEM_LAYOUT}>
-									<Publish id={itemData.id} publish={itemData.publish} onChange={managers.videos.publish} />
+									<Publish
+										id={itemData.id}
+										publish={itemData.publish}
+										onChange={managers.videos.publish}
+									/>
 								</Form.Item>
 							)}
 
@@ -108,9 +101,10 @@ export class VideoPage extends React.Component<IProps, IState> {
 							/>
 						</Form.Item>
 
-						<Form.Item label="Title" {...FORM_ITEM_LAYOUT}>
+						<Form.Item label="Description" {...FORM_ITEM_LAYOUT}>
 							<Input.TextArea
 								rows={4}
+								autosize={true}
 								defaultValue={itemData.description}
 								value={this.state.itemData.description}
 								onChange={e => {
@@ -147,7 +141,7 @@ export class VideoPage extends React.Component<IProps, IState> {
 				</Col>
 
 				<Modal
-					title={`${this.state.itemData.title} – ${this.state.modalTitle}`}
+					title={this.state.modalTitle}
 					width="700px"
 					visible={Boolean(this.state.modalContent)}
 					onOk={this.handleCloseModal}
@@ -188,10 +182,14 @@ export class VideoPage extends React.Component<IProps, IState> {
 	};
 
 	private async fetch() {
-		managers.route.setTitle('Edit video #' + this.state.itemId);
+		managers.route.setTitle('Edit video');
 		managers.route.setBreadcrumbs([
-			{ title: 'Videos', path: PATHS.VIDEOS },
-			{ title: 'Edit Video #' + this.state.itemId, path: PATHS.VIDEO },
+			{ title: 'Videos', path: PATHS.VIDEOS, type: EBreadcrumbsType.Default },
+			{
+				title: this.state.itemId,
+				path: PATHS.VIDEO.replace(':itemId', this.state.itemId),
+				type: EBreadcrumbsType.Tag,
+			},
 		]);
 
 		const { data } = await managers.api.request(
@@ -234,7 +232,14 @@ export class VideoPage extends React.Component<IProps, IState> {
 									className={preview}
 									onClick={() => {
 										this.setState({
-											modalTitle: `${row.fileName}${EVideoFileExtension.Jpeg}`,
+											modalTitle: (
+												<div className={modalTitle}>
+													<div className="title">Preview</div>
+													<Tag>Video {this.state.itemData.id}</Tag>
+													<Tag>Preview {row.id}</Tag>
+													{this.getType(videoId, row)}
+												</div>
+											),
 											modalContent: <img width="100%" src={previewSrc} />,
 										});
 									}}
@@ -255,7 +260,14 @@ export class VideoPage extends React.Component<IProps, IState> {
 									size="default"
 									onClick={() => {
 										this.setState({
-											modalTitle: `${row.fileName}${EVideoFileExtension.Mp4}`,
+											modalTitle: (
+												<div className={modalTitle}>
+													<div className="title">Preview</div>
+													<Tag>Video #{this.state.itemData.id}</Tag>
+													<Tag>Preview #{row.id}</Tag>
+													{this.getType(videoId, row)}
+												</div>
+											),
 											modalContent: (
 												<video
 													controls={true}
@@ -311,60 +323,69 @@ export class VideoPage extends React.Component<IProps, IState> {
 				rowKey: row => 'fileUrl' + row.id,
 				sorter: (a, b) => ('' + a.fileName).localeCompare(b.fileName),
 				render: (id, row: IVideoFile) => {
-					switch (row.type) {
-						case EVideoFileKind.Thumbnail: {
-							const previewSrc = Utils.getImagePath(
-								videoId,
-								row.fileName,
-								EVideoFileKind.Thumbnail,
-							);
-
-							return (
-								<React.Fragment key={id + 'fileName1'}>
-									<Tag>
-										<a
-											target="_blank"
-											href={previewSrc.replace(
-												EVideoFileExtension.Image,
-												EVideoFileExtension.Jpeg,
-											)}
-										>
-											{row.fileName}
-											{EVideoFileExtension.Jpeg}
-										</a>
-									</Tag>
-									<Tag>
-										<a
-											target="_blank"
-											href={previewSrc.replace(
-												EVideoFileExtension.Image,
-												EVideoFileExtension.Webp,
-											)}
-										>
-											{row.fileName}
-											{EVideoFileExtension.Webp}
-										</a>
-									</Tag>
-								</React.Fragment>
-							);
-						}
-
-						case EVideoFileKind.Video:
-						case EVideoFileKind.Preview: {
-							const videoSrc = Utils.getDirectVideoPath(videoId, row.fileName);
-
-							return (
-								<Tag key={id + 'fileName1'}>
-									<a target="_blank" href={videoSrc}>
-										{row.fileName}
-									</a>
-								</Tag>
-							);
-						}
-					}
+					return (
+						<React.Fragment key={id + 'fileName1'}>
+							{this.getType(videoId, row)}
+						</React.Fragment>
+					);
 				},
 			},
 		];
+	}
+
+	private getType(videoId: number, item: IVideoFile) {
+		switch (item.type) {
+			case EVideoFileKind.Thumbnail: {
+				const previewSrc = Utils.getImagePath(
+					videoId,
+					item.fileName,
+					EVideoFileKind.Thumbnail,
+				);
+
+				return (
+					<>
+						<Tag color="blue">
+							<a
+								target="_blank"
+								href={previewSrc.replace(
+									EVideoFileExtension.Image,
+									EVideoFileExtension.Jpeg,
+								)}
+							>
+								{item.fileName}
+								{EVideoFileExtension.Jpeg}
+							</a>
+						</Tag>
+						<Tag color="blue">
+							<a
+								target="_blank"
+								href={previewSrc.replace(
+									EVideoFileExtension.Image,
+									EVideoFileExtension.Webp,
+								)}
+							>
+								{item.fileName}
+								{EVideoFileExtension.Webp}
+							</a>
+						</Tag>
+					</>
+				);
+			}
+
+			case EVideoFileKind.Video:
+			case EVideoFileKind.Preview: {
+				const videoSrc = Utils.getDirectVideoPath(videoId, item.fileName);
+
+				return (
+					<Tag color="blue">
+						<a target="_blank" href={videoSrc}>
+							{item.fileName}
+							{EVideoFileExtension.Mp4}
+						</a>
+					</Tag>
+				);
+			}
+		}
 	}
 
 	private get getVideoInfoItems() {
@@ -478,4 +499,14 @@ const avatar = css`
 
 const preview = css`
 	cursor: pointer;
+`;
+
+const modalTitle = css`
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+
+	> .title {
+		margin-right: 20px;
+	}
 `;

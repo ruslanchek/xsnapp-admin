@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { css } from 'react-emotion';
-import { Breadcrumb } from 'antd';
-import { IBreadcrumb } from '../../stores/StateStore';
+import { Badge, Breadcrumb, Tag } from 'antd';
+import { EBreadcrumbsType, IBreadcrumb } from '../../stores/StateStore';
 import { Link } from 'react-router-dom';
 
 interface IProps {
@@ -18,14 +18,29 @@ export class PageHeader extends React.Component<IProps, {}> {
 				{breadcrumbs.length > 1 && (
 					<Breadcrumb>
 						{breadcrumbs.map((breadcrumb, i) => {
+							let component = null;
+
+							switch (breadcrumb.type) {
+								case EBreadcrumbsType.Tag : {
+									component = (<Tag>{breadcrumb.title}</Tag>);
+									break;
+								}
+
+								default: {
+									component = (<>{breadcrumb.title}</>);
+								}
+							}
+
 							if (i < breadcrumbs.length - 1) {
 								return (
 									<Breadcrumb.Item key={i}>
-										<Link to={breadcrumb.path}>{breadcrumb.title}</Link>
+										<Link to={breadcrumb.path}>{component}</Link>
 									</Breadcrumb.Item>
 								);
 							} else {
-								return <Breadcrumb.Item key={i}>{breadcrumb.title}</Breadcrumb.Item>;
+								return (
+									<Breadcrumb.Item key={i}>{component}</Breadcrumb.Item>
+								);
 							}
 						})}
 					</Breadcrumb>

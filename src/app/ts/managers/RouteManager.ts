@@ -1,13 +1,13 @@
 import { History } from 'history';
-import { IBreadcrumb, StateStore } from '../stores/StateStore';
+import {
+	EBreadcrumbsType,
+	IBreadcrumb,
+	StateStore,
+} from '../stores/StateStore';
 import { Manager } from './Manager';
 
 export enum ERouteAuthRule {
 	Shared,
-}
-
-interface IMeta {
-	title: string;
 }
 
 export class RouteManager extends Manager {
@@ -26,10 +26,11 @@ export class RouteManager extends Manager {
 	}
 
 	public setBreadcrumbs(breadcrumbs: IBreadcrumb[]) {
-		const initial = [
+		const initial: IBreadcrumb[] = [
 			{
 				title: 'Home',
 				path: '/',
+				type: EBreadcrumbsType.Home,
 			},
 		];
 

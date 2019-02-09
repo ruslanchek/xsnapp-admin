@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Table, Avatar, Tag, Button } from 'antd';
+import { Avatar, Table, Tag } from 'antd';
 import { CONFIG, PATHS } from 'app/ts/config';
 import { css } from 'react-emotion';
 import { Link } from 'react-router-dom';
@@ -17,6 +17,7 @@ import {
 } from '../../enums/video';
 import { Utils } from '../../lib/Utils';
 import { IListFetchParams } from '../../managers/ApiManager';
+import { EBreadcrumbsType } from '../../stores/StateStore';
 
 interface IProps {}
 
@@ -32,7 +33,9 @@ export class VideosPage extends React.Component<IProps, IState> {
 
 	public async componentDidMount() {
 		managers.route.setTitle('Videos');
-		managers.route.setBreadcrumbs([{ title: 'Videos', path: PATHS.VIDEOS }]);
+		managers.route.setBreadcrumbs([
+			{ title: 'Videos', path: PATHS.VIDEOS, type: EBreadcrumbsType.Default },
+		]);
 
 		const { total } = await managers.videos.fetch();
 
@@ -93,7 +96,11 @@ export class VideosPage extends React.Component<IProps, IState> {
 				render: (publish, row: IVideo) => (
 					<>
 						{!row.corrupted && row.processed && row.uploaded && row.stored && (
-							<Publish id={row.id} publish={row.publish} onChange={managers.videos.publish} />
+							<Publish
+								id={row.id}
+								publish={row.publish}
+								onChange={managers.videos.publish}
+							/>
 						)}
 					</>
 				),
@@ -171,7 +178,14 @@ export class VideosPage extends React.Component<IProps, IState> {
 									className={avatar}
 									src={`${CONFIG.AVATARS_PATH}/${row.user.id}/avatar.jpg`}
 								/>
-								<Link to={`${PATHS.USER.replace(':itemId', row.user.id.toString())}`}>{username}</Link>
+								<Link
+									to={`${PATHS.USER.replace(
+										':itemId',
+										row.user.id.toString(),
+									)}`}
+								>
+									{username}
+								</Link>
 							</>
 						);
 					} else {

@@ -8,6 +8,7 @@ import { followStore } from 'react-stores';
 import { SorterResult } from 'antd/lib/table';
 import { IListFetchParams } from '../../managers/ApiManager';
 import { CategoriesStore, ICategory } from '../../stores/CategoriesStore';
+import { EBreadcrumbsType } from '../../stores/StateStore';
 
 interface IProps {}
 
@@ -23,7 +24,13 @@ export class CategoriesPage extends React.Component<IProps, IState> {
 
 	public async componentDidMount() {
 		managers.route.setTitle('Categories');
-		managers.route.setBreadcrumbs([{ title: 'Categories', path: PATHS.VIDEOS }]);
+		managers.route.setBreadcrumbs([
+			{
+				title: 'Categories',
+				path: PATHS.CATEGORIES,
+				type: EBreadcrumbsType.Default,
+			},
+		]);
 
 		const { total } = await managers.categories.fetch();
 
@@ -50,7 +57,11 @@ export class CategoriesPage extends React.Component<IProps, IState> {
 				sorter: (a, b) => a.publish - b.publish,
 				render: (publish, row: ICategory) => (
 					<>
-						<Publish id={row.id} publish={row.publish} onChange={managers.categories.publish} />
+						<Publish
+							id={row.id}
+							publish={row.publish}
+							onChange={managers.categories.publish}
+						/>
 					</>
 				),
 			},
@@ -63,7 +74,9 @@ export class CategoriesPage extends React.Component<IProps, IState> {
 				sorter: (a, b) => a.title - b.title,
 				render: (title, row: ICategory) => {
 					return (
-						<Link to={`${PATHS.CATEGORY.replace(':itemId', row.id.toString())}`}>
+						<Link
+							to={`${PATHS.CATEGORY.replace(':itemId', row.id.toString())}`}
+						>
 							{title}
 						</Link>
 					);

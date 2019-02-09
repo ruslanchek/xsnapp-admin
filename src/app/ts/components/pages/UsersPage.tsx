@@ -8,6 +8,7 @@ import { SorterResult } from 'antd/lib/table';
 import { IUser, UsersStore } from '../../stores/UsersStore';
 import { Link } from 'react-router-dom';
 import { IListFetchParams } from '../../managers/ApiManager';
+import { EBreadcrumbsType } from '../../stores/StateStore';
 
 interface IProps {}
 
@@ -23,7 +24,9 @@ export class UsersPage extends React.Component<IProps, IState> {
 
 	public async componentDidMount() {
 		managers.route.setTitle('Users');
-		managers.route.setBreadcrumbs([{ title: 'Users', path: PATHS.USERS }]);
+		managers.route.setBreadcrumbs([
+			{ title: 'Users', path: PATHS.USERS, type: EBreadcrumbsType.Default },
+		]);
 
 		const { total } = await managers.users.fetch();
 

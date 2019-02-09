@@ -8,6 +8,7 @@ import { VideoPage } from './pages/VideoPage';
 import { UsersPage } from './pages/UsersPage';
 import { MailingPage } from './pages/MailingPage';
 import { CategoriesPage } from './pages/CategoriesPage';
+import { CategoryPage } from './pages/CategoryPage';
 
 interface IState {
 	key: number;
@@ -84,6 +85,18 @@ export class Routes extends React.Component<{}, IState> {
 						return (
 							<Page {...props}>
 								<CategoriesPage />
+							</Page>
+						);
+					}}
+				/>
+
+				<Route
+					exact={true}
+					path={PATHS.CATEGORY}
+					render={props => {
+						return (
+							<Page {...props}>
+								<CategoryPage />
 							</Page>
 						);
 					}}
