@@ -29,7 +29,7 @@ export const API_PATHS = {
 };
 
 export const CONFIG = {
-	API_BASE_URL: 'http://l.xsnapp.com:5566/api',
+	API_BASE_URL: 'http://mbrtn.local:5566/api',
 	STATIC_PATH: 'https://static-xsnapp.ams3.cdn.digitaloceanspaces.com/static',
 	CONTENT_PATH: 'https://static-xsnapp.ams3.cdn.digitaloceanspaces.com/content',
 	AVATARS_PATH: 'https://static-xsnapp.ams3.cdn.digitaloceanspaces.com/avatars',
